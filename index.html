@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="hi" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduNotes Premium – Developed by Abhishek Kumar Yadav</title>
+<style>
+  *{-webkit-tap-highlight-color:transparent}
+  body{background:#0a0a1a;font-family:'Segoe UI',system-ui,sans-serif}
+  #loading-screen{position:fixed;inset:0;background:linear-gradient(135deg,#1a0033,#0a0a1a,#001a33);display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;z-index:99999;padding:20px}
+  #loading-screen .spinner{width:70px;height:70px;border:3px solid rgba(255,215,0,0.15);border-top:3px solid #ffd700;border-right:3px solid #a855f7;border-radius:50%;animation:spin 1s linear infinite;margin-bottom:25px;box-shadow:0 0 40px rgba(168,85,247,0.5)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #loading-screen h2{font-size:22px;margin:0 0 8px;text-align:center;background:linear-gradient(90deg,#ffd700,#a855f7,#ec4899);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:900;letter-spacing:0.1em}
+  #loading-screen p{font-size:13px;opacity:.7;margin:0;letter-spacing:0.15em;text-transform:uppercase}
+  #loading-error{display:none;background:rgba(220,38,38,0.2);border:1px solid #dc2626;padding:15px;border-radius:12px;max-width:95%;margin-top:20px;font-size:13px;text-align:center;line-height:1.6;color:#fca5a5}
+  @keyframes rainbow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+  @keyframes glow{0%,100%{box-shadow:0 0 20px rgba(168,85,247,0.4),0 0 40px rgba(255,215,0,0.2)}50%{box-shadow:0 0 40px rgba(168,85,247,0.7),0 0 80px rgba(255,215,0,0.4)}}
+  @keyframes shine{0%{background-position:-200% 0}100%{background-position:200% 0}}
+  @keyframes bgMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+  @keyframes marquee{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+  .rainbow-text{background:linear-gradient(90deg,#ffd700,#ff8a00,#ff005e,#a855f7,#00c2ff,#ffd700);background-size:400% 400%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:rainbow 6s ease infinite;font-weight:900;letter-spacing:.08em}
+  .premium-bg{background:linear-gradient(135deg,#0a0a1a 0%,#1a0033 25%,#0a0a1a 50%,#001a33 75%,#0a0a1a 100%);background-size:400% 400%;animation:bgMove 25s ease infinite}
+  .glass{background:rgba(30,20,60,0.5);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,215,0,0.15);box-shadow:0 8px 32px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.1)}
+  .glass-dark{background:rgba(15,10,35,0.7);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(168,85,247,0.2);box-shadow:0 12px 48px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.08)}
+  .card-premium{background:linear-gradient(135deg,rgba(30,20,60,0.75),rgba(20,10,40,0.9));border:1px solid rgba(255,215,0,0.25);backdrop-filter:blur(20px);box-shadow:0 10px 40px rgba(0,0,0,0.5),0 0 0 1px rgba(255,215,0,0.1),inset 0 1px 0 rgba(255,255,255,0.08);transition:all 0.4s cubic-bezier(0.4,0,0.2,1)}
+  .card-premium:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(168,85,247,0.4),0 0 0 1px rgba(255,215,0,0.35),0 0 40px rgba(255,215,0,0.15),inset 0 1px 0 rgba(255,255,255,0.15);border-color:rgba(255,215,0,0.5)}
+  .btn-gold{background:linear-gradient(135deg,#ffd700 0%,#ffaa00 50%,#ff8800 100%);color:#0a0a1a;font-weight:800;box-shadow:0 6px 24px rgba(255,215,0,0.35),inset 0 1px 0 rgba(255,255,255,0.4);position:relative;overflow:hidden;transition:all 0.3s}
+  .btn-gold:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(255,215,0,0.55),inset 0 1px 0 rgba(255,255,255,0.5)}
+  .btn-gold::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent);background-size:200% 100%;animation:shine 3s infinite;pointer-events:none}
+  .btn-purple{background:linear-gradient(135deg,#a855f7 0%,#ec4899 100%);color:#fff;font-weight:800;box-shadow:0 6px 24px rgba(168,85,247,0.4),inset 0 1px 0 rgba(255,255,255,0.2);transition:all 0.3s}
+  .btn-purple:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(168,85,247,0.6)}
+  .btn-emerald{background:linear-gradient(135deg,#10b981 0%,#06b6d4 100%);color:#fff;font-weight:800;box-shadow:0 6px 24px rgba(16,185,129,0.35),inset 0 1px 0 rgba(255,255,255,0.2);transition:all 0.3s}
+  .btn-emerald:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(16,185,129,0.55)}
+  .btn-cyan{background:linear-gradient(135deg,#06b6d4 0%,#3b82f6 100%);color:#fff;font-weight:800;box-shadow:0 6px 24px rgba(6,182,212,0.35),inset 0 1px 0 rgba(255,255,255,0.2);transition:all 0.3s}
+  .btn-cyan:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(6,182,212,0.55)}
+  .btn-rose{background:linear-gradient(135deg,#f43f5e 0%,#e11d48 100%);color:#fff;font-weight:800;box-shadow:0 6px 24px rgba(244,63,94,0.4);transition:all 0.3s}
+  .btn-rose:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(244,63,94,0.6)}
+  .btn-orange{background:linear-gradient(135deg,#f97316 0%,#ea580c 100%);color:#fff;font-weight:800;box-shadow:0 6px 24px rgba(249,115,22,0.4);transition:all 0.3s}
+  .btn-orange:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(249,115,22,0.6)}
+  .tab-btn{transition:all 0.3s;border:1px solid transparent}
+  .tab-btn:hover{background:rgba(255,215,0,0.1);border-color:rgba(255,215,0,0.2);transform:translateY(-1px)}
+  .tab-active{background:linear-gradient(135deg,rgba(255,215,0,0.9),rgba(255,170,0,0.9))!important;color:#0a0a1a!important;box-shadow:0 6px 24px rgba(255,215,0,0.4),inset 0 1px 0 rgba(255,255,255,0.5);border-color:rgba(255,215,0,0.8)!important}
+  .premium-badge{background:linear-gradient(135deg,#ffd700,#ff8800);color:#0a0a1a;font-weight:900;padding:3px 10px;border-radius:999px;font-size:10px;letter-spacing:0.08em;box-shadow:0 2px 12px rgba(255,215,0,0.5);animation:glow 2s ease infinite}
+  .input-premium{background:rgba(15,10,35,0.6);border:1px solid rgba(168,85,247,0.3);color:#fff;transition:all 0.3s}
+  .input-premium:focus{outline:none;border-color:#ffd700;box-shadow:0 0 0 3px rgba(255,215,0,0.15),0 0 20px rgba(255,215,0,0.2)}
+  .input-premium::placeholder{color:rgba(255,255,255,0.35)}
+  .page-body h4{font-weight:800;margin:14px 0 8px;background:linear-gradient(90deg,#a855f7,#ec4899);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .page-body p{margin-bottom:10px;line-height:1.8;color:#cbd5e1}
+  .page-body ul{list-style:none;padding-left:0;margin-bottom:10px}
+  .page-body li{margin-bottom:6px;padding-left:24px;position:relative;color:#cbd5e1}
+  .page-body li::before{content:'▸';position:absolute;left:0;color:#ffd700;font-weight:900}
+  .page-body strong{background:linear-gradient(90deg,#ffd700,#ff8a00);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:800}
+  .hero-glow{position:relative;overflow:hidden}
+  .hero-glow::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,215,0,0.15) 0%,transparent 50%);animation:glow 8s ease-in-out infinite;pointer-events:none}
+  .stat-card{position:relative;overflow:hidden}
+  .stat-card::before{content:'';position:absolute;top:0;right:0;width:120px;height:120px;background:radial-gradient(circle,rgba(255,255,255,0.15),transparent 70%);border-radius:50%;transform:translate(40%,-40%);pointer-events:none}
+  .faq-item{background:rgba(15,10,35,0.7);border-radius:14px;padding:16px 20px;margin-bottom:12px;border:1px solid rgba(168,85,247,0.2);transition:all 0.3s;backdrop-filter:blur(10px)}
+  .faq-item:hover{border-color:rgba(255,215,0,0.4);transform:translateX(4px)}
+  .faq-item summary{cursor:pointer;font-weight:700;background:linear-gradient(90deg,#ffd700,#a855f7);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .faq-item p{margin-top:12px;color:#94a3b8;font-size:14px;line-height:1.7}
+  .admin-tab-active{background:linear-gradient(135deg,#ffd700,#ff8800)!important;color:#0a0a1a!important;font-weight:900;box-shadow:0 6px 24px rgba(255,215,0,0.5),inset 0 1px 0 rgba(255,255,255,0.5)}
+  .mini-input{background:rgba(15,10,35,0.8);border:1px solid rgba(168,85,247,0.3);color:#fff;font-size:13px;padding:8px 12px;border-radius:10px;transition:all 0.3s;width:100%}
+  .mini-input:focus{outline:none;border-color:#ffd700;box-shadow:0 0 0 2px rgba(255,215,0,0.2)}
+  .mini-input::placeholder{color:rgba(255,255,255,0.3)}
+  ::-webkit-scrollbar{width:8px;height:8px}
+  ::-webkit-scrollbar-track{background:rgba(0,0,0,0.3)}
+  ::-webkit-scrollbar-thumb{background:linear-gradient(135deg,#a855f7,#ec4899);border-radius:10px}
+  .announce-ticker{display:inline-block;white-space:nowrap;animation:marquee 20s linear infinite;padding-left:100%}
+  .railtest-answer{max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.4s ease;padding:0 16px}
+  .railtest-answer.open{max-height:500px;padding:14px 16px}
+</style>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:'class'};</script>
+<script crossorigin src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.23.5/babel.min.js"></script>
+</head>
+<body class="premium-bg text-white min-h-screen">
+<div id="loading-screen">
+  <div class="spinner"></div>
+  <h2>EDUNOTES PREMIUM</h2>
+  <p>Loading Experience...</p>
+  <div id="loading-error"></div>
+</div>
+<div id="root"></div>
+<script>
+window.addEventListener('error',function(e){var err=document.getElementById('loading-error');if(err){err.style.display='block';err.innerHTML='<b>⚠️ Error:</b> '+(e.message||'Unknown');}});
+setTimeout(function(){var l=document.getElementById('loading-screen'),r=document.getElementById('root'),err=document.getElementById('loading-error');if(l&&r&&r.innerHTML.trim()){l.style.display='none';}else if(l&&err){err.style.display='block';err.innerHTML='<b>⚠️ App load nahi hua</b><br><small>Internet check karein.</small><br><br><button onclick="location.reload()" style="background:#ffd700;color:#0a0a1a;border:none;padding:10px 24px;border-radius:10px;font-weight:900;cursor:pointer;font-size:14px">🔄 Reload Page</button>';}},6000);
+</script>
+
+<script type="text/babel" data-presets="react">
+const {useState,useEffect}=React;
+
+const INITIAL_NOTES=[
+{id:1,classLevel:6,subject:'Science',medium:'en',isPremium:false,title:'Sources of Food & Components',pages:[
+{heading:'1. Introduction',body:'<p>Food gives energy, helps growth, protects from diseases.</p>'},
+{heading:'2. Sources',body:'<ul><li>Plants: grains, fruits, vegetables</li><li>Animals: milk, eggs, meat</li></ul>'},
+{heading:'3. Components',body:'<ul><li>Carbohydrates</li><li>Proteins</li><li>Fats</li><li>Vitamins & Minerals</li></ul>'},
+{heading:'4. Balanced Diet',body:'<p>All nutrients in correct proportion.</p>'},
+{heading:'5. Deficiency',body:'<ul><li>Vit A – Night blindness</li><li>Vit C – Scurvy</li><li>Iron – Anaemia</li></ul>'},
+]},
+{id:2,classLevel:7,subject:'Science',medium:'hi',isPremium:false,title:'पौधों में पोषण',pages:[
+{heading:'1. परिचय',body:'<p>पौधे स्वयं भोजन बनाते हैं — प्रकाश संश्लेषण।</p>'},
+{heading:'2. प्रकाश संश्लेषण',body:'<p><strong>6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂</strong></p>'},
+{heading:'3. आवश्यक तत्व',body:'<ul><li>सूर्य प्रकाश</li><li>क्लोरोफिल</li><li>CO₂</li><li>जल</li></ul>'},
+{heading:'4. पोषण प्रकार',body:'<ul><li>स्वपोषी</li><li>परपोषी</li><li>कीटभक्षी</li><li>परजीवी</li></ul>'},
+{heading:'5. सारांश',body:'<ul><li>पौधे स्वपोषी</li><li>क्लोरोफिल आवश्यक</li></ul>'},
+]},
+{id:3,classLevel:8,subject:'Maths',medium:'en',isPremium:false,title:'Rational Numbers',pages:[
+{heading:'1. Introduction',body:'<p>p/q form, q≠0, p & q integers.</p>'},
+{heading:'2. Properties',body:'<ul><li>Closure</li><li>Commutative</li><li>Associative</li></ul>'},
+{heading:'3. Identities',body:'<p>Additive: a+0=a. Multiplicative: a×1=a.</p>'},
+{heading:'4. Inverses',body:'<p>Additive inverse: -a. Multiplicative: 1/a.</p>'},
+{heading:'5. Number Line',body:'<p>Between any two rationals, infinite rationals.</p>'},
+]},
+{id:4,classLevel:9,subject:'Science',medium:'hi',isPremium:true,title:'हमारे आस-पास के पदार्थ',pages:[
+{heading:'1. परिचय',body:'<p>सब पदार्थ से बना।</p>'},
+{heading:'2. अवस्थाएँ',body:'<ul><li>ठोस</li><li>द्रव</li><li>गैस</li></ul>'},
+{heading:'3. परिवर्तन',body:'<p>गलन, वाष्पीकरण, संघनन।</p>'},
+{heading:'4. वाष्पीकरण कारक',body:'<ul><li>तापमान</li><li>क्षेत्रफल</li><li>आर्द्रता</li><li>गति</li></ul>'},
+{heading:'5. सारांश',body:'<ul><li>तीन अवस्थाएँ</li></ul>'},
+]},
+{id:5,classLevel:9,subject:'Maths',medium:'en',isPremium:false,title:'Number Systems',pages:[
+{heading:'1. Introduction',body:'<p>Types of numbers.</p>'},
+{heading:'2. Types',body:'<ul><li>Natural: 1,2,3...</li><li>Whole: 0,1,2...</li><li>Integers: -2,-1,0,1,2...</li></ul>'},
+{heading:'3. Rational',body:'<p>p/q, q≠0</p>'},
+{heading:'4. Irrational',body:'<p>√2, π — non-terminating non-repeating.</p>'},
+{heading:'5. Real',body:'<p>Rational + irrational = real numbers.</p>'},
+]},
+{id:6,classLevel:10,subject:'Science',medium:'en',isPremium:true,title:'Chemical Reactions & Equations',pages:[
+{heading:'1. Reaction',body:'<p>Substances change into new substances.</p>'},
+{heading:'2. Signs',body:'<ul><li>State change</li><li>Colour change</li><li>Gas evolution</li></ul>'},
+{heading:'3. Types',body:'<ul><li>Combination: A+B→AB</li><li>Decomposition: AB→A+B</li><li>Displacement: A+BC→AC+B</li></ul>'},
+{heading:'4. Redox',body:'<p>Oxidation (gain of O₂) + Reduction (loss of O₂).</p>'},
+{heading:'5. Corrosion',body:'<p>Rusting of iron — Fe₂O₃·xH₂O.</p>'},
+]},
+{id:7,classLevel:10,subject:'Science',medium:'hi',isPremium:false,title:'रासायनिक अभिक्रियाएँ',pages:[
+{heading:'1. अभिक्रिया',body:'<p>नए पदार्थ बनते हैं।</p>'},
+{heading:'2. लक्षण',body:'<ul><li>अवस्था</li><li>रंग</li><li>गैस</li><li>तापमान</li></ul>'},
+{heading:'3. प्रकार',body:'<ul><li>संयोजन: A+B→AB</li><li>वियोजन: AB→A+B</li><li>विस्थापन: A+BC→AC+B</li></ul>'},
+{heading:'4. ऑक्सीकरण',body:'<p>O₂ का जुड़ना। अपचयन में O₂ का हटना।</p>'},
+{heading:'5. संक्षारण',body:'<p>जंग लगना।</p>'},
+]},
+{id:8,classLevel:10,subject:'Maths',medium:'hi',isPremium:true,title:'वास्तविक संख्याएँ एवं बहुपद',pages:[
+{heading:'1. वास्तविक',body:'<p>परिमेय + अपरिमेय = वास्तविक।</p>'},
+{heading:'2. यूक्लिड',body:'<p>a = bq + r, 0 ≤ r &lt; b</p>'},
+{heading:'3. HCF/LCM',body:'<p>HCF × LCM = दोनों संख्याओं का गुणनफल</p>'},
+{heading:'4. बहुपद',body:'<p>ax² + bx + c — द्विघात बहुपद।</p>'},
+{heading:'5. शून्यक',body:'<p>योग = -b/a, गुणनफल = c/a</p>'},
+]},
+{id:9,classLevel:11,subject:'Physics',medium:'en',isPremium:true,title:'Units and Measurements',pages:[
+{heading:'1. Physical Quantity',body:'<p>Anything measurable.</p>'},
+{heading:'2. Fundamental',body:'<ul><li>Length - m</li><li>Mass - kg</li><li>Time - s</li><li>Current - A</li><li>Temperature - K</li></ul>'},
+{heading:'3. Dimensional',body:'<p>Force = [M L T⁻²]</p>'},
+{heading:'4. Errors',body:'<ul><li>Systematic</li><li>Random</li><li>Least count</li></ul>'},
+{heading:'5. Accuracy',body:'<p>Closeness to true value.</p>'},
+]},
+{id:10,classLevel:11,subject:'Chemistry',medium:'hi',isPremium:true,title:'रसायन की मूल अवधारणाएँ',pages:[
+{heading:'1. परिचय',body:'<p>संरचना व परिवर्तन का अध्ययन।</p>'},
+{heading:'2. मोल',body:'<p>1 मोल = 6.022×10²³ कण</p>'},
+{heading:'3. मोलर द्रव्यमान',body:'<p>H₂O = 18 g/mol</p>'},
+{heading:'4. मोल सूत्र',body:'<p>n = द्रव्यमान / मोलर द्रव्यमान</p>'},
+{heading:'5. सारांश',body:'<ul><li>6.022×10²³ कण</li></ul>'},
+]},
+{id:11,classLevel:12,subject:'Physics',medium:'hi',isPremium:true,title:'विद्युत आवेश तथा क्षेत्र',pages:[
+{heading:'1. आवेश',body:'<p>धन व ऋण दो प्रकार।</p>'},
+{heading:'2. कूलॉम',body:'<p>F = (1/4πε₀)·q₁q₂/r²</p><p>1/4πε₀ = 9×10⁹</p>'},
+{heading:'3. विद्युत क्षेत्र',body:'<p>E = F/q, मात्रक N/C</p>'},
+{heading:'4. गाउस',body:'<p>Φ = q/ε₀</p>'},
+{heading:'5. सारांश',body:'<ul><li>कूलॉम का नियम</li><li>गाउस का नियम</li></ul>'},
+]},
+{id:12,classLevel:12,subject:'Chemistry',medium:'hi',isPremium:true,title:'विलयन',pages:[
+{heading:'1. विलयन',body:'<p>समांगी मिश्रण।</p>'},
+{heading:'2. मोलरता',body:'<p>M = मोल / L</p>'},
+{heading:'3. मोललता',body:'<p>m = मोल / kg</p>'},
+{heading:'4. राउल्ट',body:'<p>(P°-P)/P° = x₂</p>'},
+{heading:'5. अणुसंख्य गुण',body:'<ul><li>वाष्प दाब अवनमन</li><li>ΔTb = Kb·m</li><li>ΔTf = Kf·m</li><li>π = CRT</li></ul>'},
+]},
+{id:13,classLevel:12,subject:'Maths',medium:'hi',isPremium:true,title:'संबंध एवं फलन',pages:[
+{heading:'1. संबंध',body:'<p>A×B का उपसमुच्चय।</p>'},
+{heading:'2. प्रकार',body:'<ul><li>तत्समक</li><li>सममित</li><li>संक्रामक</li></ul>'},
+{heading:'3. तुल्यता',body:'<p>तीनों मिलकर तुल्यता संबंध।</p>'},
+{heading:'4. फलन',body:'<p>हर इनपुट → एक आउटपुट।</p>'},
+{heading:'5. प्रकार',body:'<ul><li>एकैक</li><li>आच्छादक</li><li>bijective</li></ul>'},
+]},
+{id:14,classLevel:11,subject:'Biology',medium:'hi',isPremium:false,title:'जीव जगत',pages:[
+{heading:'1. लक्षण',body:'<ul><li>वृद्धि</li><li>प्रजनन</li><li>चेतना</li></ul>'},
+{heading:'2. द्विनाम',body:'<p>लीनियस। Homo sapiens.</p>'},
+{heading:'3. श्रेणियाँ',body:'<p>जगत→संघ→वर्ग→गण→कुल→वंश→जाति</p>'},
+{heading:'4. पाँच जगत',body:'<ul><li>मोनेरा</li><li>प्रोटिस्टा</li><li>फंजाई</li><li>प्लांटी</li><li>एनिमेलिया</li></ul>'},
+{heading:'5. सारांश',body:'<ul><li>7 श्रेणियाँ</li></ul>'},
+]},
+{id:15,classLevel:12,subject:'Biology',medium:'hi',isPremium:false,title:'जीवों में जनन',pages:[
+{heading:'1. जनन',body:'<p>संतान उत्पन्न करने की प्रक्रिया।</p>'},
+{heading:'2. अलैंगिक',body:'<ul><li>विखंडन – अमीबा</li><li>मुकुलन – यीस्ट</li><li>खंडन – स्पाइरोगाइरा</li></ul>'},
+{heading:'3. लैंगिक',body:'<p>नर + मादा युग्मक का संलयन।</p>'},
+{heading:'4. निषेचन',body:'<ul><li>बाह्य – मछली</li><li>आंतरिक – मनुष्य</li></ul>'},
+{heading:'5. सारांश',body:'<ul><li>अलैंगिक – 1 जनक</li><li>लैंगिक – 2 जनक</li></ul>'},
+]},
+];
+
+const INITIAL_QUIZZES=[
+{id:1,classLevel:6,subject:'Science',medium:'en',title:'Science Quiz – Class 6',questions:[
+{q:'Vitamin from sunlight?',options:['A','B','C','D'],correct:3},
+{q:'Scurvy due to?',options:['Vit A','Vit C','Vit D','Iron'],correct:1},
+{q:'Rice is source of?',options:['Carbohydrate','Protein','Fat','Vitamin'],correct:0},
+{q:'Potato is which part?',options:['Root','Stem','Leaf','Flower'],correct:1},
+]},
+{id:2,classLevel:7,subject:'Science',medium:'hi',title:'पौधों में पोषण क्विज़',questions:[
+{q:'प्रकाश संश्लेषण में गैस?',options:['O₂','CO₂','N₂','H₂'],correct:1},
+{q:'क्लोरोफिल रंग?',options:['लाल','पीला','हरा','नीला'],correct:2},
+{q:'अमरबेल?',options:['स्वपोषी','परजीवी','मृतजीवी','कीटभक्षी'],correct:1},
+{q:'रंध्र कहाँ?',options:['जड़','तना','पत्ती','फूल'],correct:2},
+]},
+{id:3,classLevel:8,subject:'Maths',medium:'en',title:'Rational Numbers Quiz',questions:[
+{q:'Which is rational?',options:['√2','π','3/4','e'],correct:2},
+{q:'Additive identity?',options:['1','0','-1','none'],correct:1},
+{q:'Additive inverse of 5?',options:['1/5','-5','5','0'],correct:1},
+{q:'Closed under?',options:['÷','+','√','none'],correct:1},
+]},
+{id:4,classLevel:9,subject:'Science',medium:'hi',title:'पदार्थ क्विज़',questions:[
+{q:'निश्चित आकार व आयतन?',options:['ठोस','द्रव','गैस','प्लाज्मा'],correct:0},
+{q:'ठोस→द्रव?',options:['वाष्पीकरण','गलन','संघनन','जमना'],correct:1},
+{q:'वाष्पीकरण कब तेज़?',options:['कम ताप','उच्च ताप','0°C','कभी नहीं'],correct:1},
+{q:'गैस के कण?',options:['पास','दूर','स्थिर','भारी'],correct:1},
+]},
+{id:5,classLevel:9,subject:'Maths',medium:'en',title:'Number Systems Quiz',questions:[
+{q:'Which is irrational?',options:['3/4','√2','0.5','-7'],correct:1},
+{q:'0 is a?',options:['Natural','Whole','Irrational','Negative'],correct:1},
+{q:'aᵐ×aⁿ = ?',options:['aᵐⁿ','aᵐ⁺ⁿ','aᵐ⁻ⁿ','aᵐ/ⁿ'],correct:1},
+{q:'√2 is?',options:['Rational','Irrational','Integer','Natural'],correct:1},
+]},
+{id:6,classLevel:10,subject:'Science',medium:'en',title:'Chemical Reactions Quiz',questions:[
+{q:'Rusting is?',options:['Reduction','Oxidation','Neutralisation','Decomposition'],correct:1},
+{q:'A+B→AB is?',options:['Decomp','Combination','Displacement','Redox'],correct:1},
+{q:'Balanced obeys?',options:['Gravity','Conservation of Mass','Ohm','Boyle'],correct:1},
+{q:'Rancidity due to?',options:['Water','Fat oxidation','Reduction','Fermentation'],correct:1},
+]},
+{id:7,classLevel:10,subject:'Science',medium:'hi',title:'रासायनिक अभिक्रिया क्विज़',questions:[
+{q:'जंग?',options:['अपचयन','ऑक्सीकरण','उदासीनीकरण','वियोजन'],correct:1},
+{q:'A+B→AB?',options:['वियोजन','संयोजन','विस्थापन','रेडॉक्स'],correct:1},
+{q:'संतुलित नियम?',options:['गुरुत्वाकर्षण','द्रव्यमान संरक्षण','ओम','बॉयल'],correct:1},
+{q:'विकृतगंधिता?',options:['पानी','वसा ऑक्सीकरण','अपचयन','किण्वन'],correct:1},
+]},
+{id:8,classLevel:10,subject:'Maths',medium:'hi',title:'वास्तविक संख्याएँ क्विज़',questions:[
+{q:'HCF×LCM?',options:['योग','अंतर','गुणनफल','भागफल'],correct:2},
+{q:'x²-5x+6 शून्यक?',options:['2,3','1,6','-2,-3','5,6'],correct:0},
+{q:'द्विघात शून्यकों का योग?',options:['b/a','-b/a','c/a','-c/a'],correct:1},
+{q:'यूक्लिड में r?',options:['r>b','r<b','r=b','r=0'],correct:1},
+]},
+{id:9,classLevel:11,subject:'Physics',medium:'en',title:'Units & Measurements Quiz',questions:[
+{q:'SI length?',options:['cm','m','km','inch'],correct:1},
+{q:'Fundamental?',options:['Newton','Joule','Kilogram','Watt'],correct:2},
+{q:'Force dim?',options:['MLT⁻¹','MLT⁻²','ML²T⁻²','ML²T⁻¹'],correct:1},
+{q:'SI temp?',options:['°C','°F','K','J'],correct:2},
+]},
+{id:10,classLevel:11,subject:'Chemistry',medium:'hi',title:'मूल अवधारणाएँ क्विज़',questions:[
+{q:'1 मोल कण?',options:['6.022×10²²','6.022×10²³','3.14×10²³','1×10²³'],correct:1},
+{q:'H₂O मोलर?',options:['16','18','20','22'],correct:1},
+{q:'आवोगाद्रो?',options:['Nₐ','R','K','h'],correct:0},
+{q:'मोल = ?',options:['द्रव्यमान×मोलर','द्रव्यमान/मोलर','आयतन×द्रव्यमान','कुछ नहीं'],correct:1},
+]},
+{id:11,classLevel:12,subject:'Physics',medium:'hi',title:'विद्युत आवेश क्विज़',questions:[
+{q:'कूलॉम बल ∝?',options:['r²','1/r²','r','1/r'],correct:1},
+{q:'1/4πε₀?',options:['9×10⁹','9×10⁸','6×10⁹','9×10¹⁰'],correct:0},
+{q:'E मात्रक?',options:['N','N/C','C/N','J/C'],correct:1},
+{q:'गाउस Φ?',options:['q/ε₀','qε₀','q²/ε₀','ε₀/q'],correct:0},
+]},
+{id:12,classLevel:12,subject:'Chemistry',medium:'hi',title:'विलयन क्विज़',questions:[
+{q:'मोलरता SI?',options:['mol/kg','mol/L','g/L','kg/L'],correct:1},
+{q:'राउल्ट?',options:['वाष्प दाब','ताप','घनत्व','श्यानता'],correct:0},
+{q:'ΔTb?',options:['Kb·m','Kf·m','Kb/m','m'],correct:0},
+{q:'π?',options:['CRT','RT','C/R','R/T'],correct:0},
+]},
+{id:13,classLevel:12,subject:'Maths',medium:'hi',title:'संबंध एवं फलन क्विज़',questions:[
+{q:'तुल्यता?',options:['आंशिक','तुल्यता','एकैक','आच्छादक'],correct:1},
+{q:'Bijective?',options:['एकैक','आच्छादक','दोनों','कोई नहीं'],correct:2},
+{q:'प्रतिलोम?',options:['संबंध','एकैक','आच्छादक','bijective'],correct:3},
+{q:'सम फलन?',options:['f(-x)=f(x)','f(-x)=-f(x)','f(x)=0','f(x)=x'],correct:0},
+]},
+{id:14,classLevel:11,subject:'Biology',medium:'hi',title:'जीव जगत क्विज़',questions:[
+{q:'द्विनाम जनक?',options:['डार्विन','लीनियस','मेंडल','हुक'],correct:1},
+{q:'बैक्टीरिया?',options:['मोनेरा','प्रोटिस्टा','फंजाई','प्लांटी'],correct:0},
+{q:'मशरूम?',options:['मोनेरा','प्रोटिस्टा','फंजाई','प्लांटी'],correct:2},
+{q:'Homo?',options:['जाति','वंश','कुल','गण'],correct:1},
+]},
+{id:15,classLevel:12,subject:'Biology',medium:'hi',title:'जनन क्विज़',questions:[
+{q:'अमीबा?',options:['मुकुलन','द्विखंडन','खंडन','बीजाणु'],correct:1},
+{q:'यीस्ट?',options:['मुकुलन','विखंडन','खंडन','लैंगिक'],correct:0},
+{q:'स्पाइरोगाइरा?',options:['मुकुलन','विखंडन','खंडन','बीजाणु'],correct:2},
+{q:'बाह्य निषेचन?',options:['मनुष्य','मेंढक','बकरी','कुत्ता'],correct:1},
+]},
+];
+
+const INITIAL_ANNOUNCEMENTS=[
+{id:1,text:'🎉 EduNotes Premium mein aapka swagat hai! Naye notes aur quizzes regularly add kiye ja rahe hain.',type:'success',date:'01 Nov 2025'},
+{id:2,text:'📢 Class 10 aur Class 12 ke board exam ke important notes Premium section mein available hain.',type:'info',date:'01 Nov 2025'},
+{id:3,text:'🚂 Railtest section launch ho gaya hai! Railway exam ki taiyari ke liye Q&A ab available hai.',type:'important',date:'01 Nov 2025'},
+];
+
+const INITIAL_RAILTEST=[
+{id:1,question:'What is the full form of RRB?',answer:'Railway Recruitment Board',category:'General'},
+{id:2,question:'What is the headquarters of Indian Railways?',answer:'New Delhi (Rail Bhavan)',category:'General'},
+{id:3,question:'When was Indian Railways established?',answer:'16 April 1853 (Mumbai to Thane)',category:'History'},
+{id:4,question:'What is the SI unit of force?',answer:'Newton (N)',category:'Science'},
+{id:5,question:'What is the speed of light?',answer:'3 × 10⁸ m/s',category:'Physics'},
+{id:6,question:'What is the full form of NTPC?',answer:'National Thermal Power Corporation',category:'General'},
+{id:7,question:'Which is the longest railway platform in India?',answer:'Hubballi Railway Station (Karnataka) — 1,507 m',category:'General'},
+{id:8,question:'What is the chemical formula of water?',answer:'H₂O',category:'Science'},
+];
+
+const LS_NOTES='edunotes_notes_v2';
+const LS_QUIZZES='edunotes_quizzes_v2';
+const LS_SETTINGS='edunotes_settings_v2';
+const LS_PAYMENTS='edunotes_payments_v2';
+const LS_ANN='edunotes_announcements_v2';
+const LS_RAIL='edunotes_railtest_v2';
+
+function loadLS(key,fallback){try{const v=localStorage.getItem(key);return v?JSON.parse(v):fallback;}catch(e){return fallback;}}
+function saveLS(key,val){try{localStorage.setItem(key,JSON.stringify(val));}catch(e){}}
+
+function DevBanner(){
+return(
+<div className="w-full bg-gradient-to-r from-yellow-500 via-amber-500 to-yellow-600 py-3 px-3 shadow-2xl relative overflow-hidden">
+<div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent" style={{animation:'shine 4s infinite',backgroundSize:'200% 100%'}}/>
+<div className="max-w-4xl mx-auto border-2 border-yellow-200/60 rounded-2xl py-2.5 px-5 shadow-2xl bg-black/30 backdrop-blur-md relative">
+<p className="text-center text-yellow-50 text-sm sm:text-base font-black tracking-[0.15em]">⭐ DEVELOPED BY : <span className="rainbow-text bg-white rounded-lg px-3 py-0.5 shadow-lg">ABHISHEK KUMAR YADAV</span> ⭐</p>
+</div>
+</div>
+);
+}
+
+function StudyCircleChart({percent,done,total}){
+const radius=75;const circ=2*Math.PI*radius;const offset=circ-(percent/100)*circ;
+return(
+<div className="flex flex-col items-center py-2">
+<svg width="210" height="210" viewBox="0 0 210 210" style={{filter:'drop-shadow(0 0 20px rgba(255,215,0,0.4))'}}>
+<defs><linearGradient id="gradCircle" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#ffd700"/><stop offset="50%" stopColor="#a855f7"/><stop offset="100%" stopColor="#ec4899"/></linearGradient></defs>
+<circle cx="105" cy="105" r={radius} fill="none" stroke="rgba(168,85,247,0.15)" strokeWidth="18"/>
+<circle cx="105" cy="105" r={radius} fill="none" stroke="url(#gradCircle)" strokeWidth="18" strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round" transform="rotate(-90 105 105)" style={{transition:'stroke-dashoffset 1s ease',filter:'drop-shadow(0 0 10px rgba(255,215,0,0.6))'}}/>
+<text x="105" y="103" textAnchor="middle" fontSize="40" fontWeight="900" fill="url(#gradCircle)">{percent}%</text>
+<text x="105" y="128" textAnchor="middle" fontSize="13" fontWeight="700" fill="#94a3b8">{done}/{total} Notes</text>
+</svg>
+<p className="text-center text-sm font-bold mt-2" style={{color:'#ffd700'}}>{percent>=75?'🎉 Excellent!':percent>=50?'💪 Good Progress':percent>0?'📚 Keep Going':'🚀 Start Reading!'}</p>
+</div>
+);
+}
+
+function QuizResultsChart({history}){
+if(history.length===0){return(<div className="text-center py-12 opacity-70"><p className="text-6xl mb-4">🎯</p><p className="font-bold text-white">Abhi tak koi quiz nahi diya.</p><p className="text-xs mt-2 opacity-60">Quiz tab se pehla quiz dein!</p></div>);}
+return(
+<div className="space-y-4 max-h-80 overflow-y-auto pr-2">
+{history.slice(0,10).map((h,i)=>{
+const pct=Math.round((h.score/h.total)*100);
+const barColor=pct>=80?'linear-gradient(90deg,#10b981,#06b6d4)':pct>=50?'linear-gradient(90deg,#f59e0b,#f97316)':'linear-gradient(90deg,#ef4444,#ec4899)';
+return(
+<div key={i} className="pb-2">
+<div className="flex justify-between text-xs font-bold mb-2"><span className="truncate pr-2 text-white/90">{h.title}</span><span style={{color:pct>=80?'#10b981':pct>=50?'#f59e0b':'#ef4444'}}>{h.score}/{h.total} ({pct}%)</span></div>
+<div className="w-full h-3 bg-black/30 rounded-full overflow-hidden border border-white/10"><div style={{width:`${pct}%`,background:barColor,transition:'width 0.6s ease',height:'100%',borderRadius:'999px',boxShadow:'0 0 12px rgba(255,215,0,0.3)'}}/></div>
+<p className="text-[10px] opacity-50 mt-1 text-white">{h.date}</p>
+</div>
+);
+})}
+</div>
+);
+}
+
+function App(){
+const [darkMode,setDarkMode]=useState(true);
+const [activeTab,setActiveTab]=useState('home');
+const [logoClicks,setLogoClicks]=useState(0);
+const [showAdmin,setShowAdmin]=useState(false);
+const [adminTab,setAdminTab]=useState('settings');
+const [notes,setNotes]=useState(()=>loadLS(LS_NOTES,INITIAL_NOTES));
+const [quizzes,setQuizzes]=useState(()=>loadLS(LS_QUIZZES,INITIAL_QUIZZES));
+const [announcements,setAnnouncements]=useState(()=>loadLS(LS_ANN,INITIAL_ANNOUNCEMENTS));
+const [railtest,setRailtest]=useState(()=>loadLS(LS_RAIL,INITIAL_RAILTEST));
+const [notesMedium,setNotesMedium]=useState('all');
+const [notesClass,setNotesClass]=useState('all');
+const [notesSubject,setNotesSubject]=useState('all');
+const [openNote,setOpenNote]=useState(null);
+const [openPage,setOpenPage]=useState(0);
+const [quizMedium,setQuizMedium]=useState('all');
+const [quizClass,setQuizClass]=useState('all');
+const [quizSubject,setQuizSubject]=useState('all');
+const [activeQuiz,setActiveQuiz]=useState(null);
+const [quizAnswers,setQuizAnswers]=useState({});
+const [quizSubmitted,setQuizSubmitted]=useState(false);
+const [quizScore,setQuizScore]=useState(0);
+const [user,setUser]=useState({name:'Rahul Sharma',username:'9876543210',isPremium:false});
+const [readNotes,setReadNotes]=useState([]);
+const [quizHistory,setQuizHistory]=useState([]);
+const [settings,setSettings]=useState(()=>loadLS(LS_SETTINGS,{siteName:'EduNotes Premium',price:29,upiId:'9031795956@ybl',upiName:'EduNotes Premium',whatsappNumber:'7488561546',qrCode:''}));
+const [settingsForm,setSettingsForm]=useState({upiId:'',upiName:'',price:'',whatsappNumber:'',qrCode:''});
+const [settingsSaved,setSettingsSaved]=useState(false);
+const [adminPassword,setAdminPassword]=useState('admin123');
+const [passForm,setPassForm]=useState({oldPass:'',newPass:''});
+const [adminUnlocked,setAdminUnlocked]=useState(false);
+const [adminLoginPass,setAdminLoginPass]=useState('');
+const [payments,setPayments]=useState(()=>loadLS(LS_PAYMENTS,[{id:101,studentName:'Amit Kumar',username:'9123456789',amount:29,utr:'431289012345',screenshot:'https://placehold.co/300x500/4f46e5/ffffff?text=UPI+Paid+Rs.29',status:'pending'}]));
+const [utrInput,setUtrInput]=useState('');
+const [screenshotPreview,setScreenshotPreview]=useState(null);
+const [zoomImage,setZoomImage]=useState(null);
+
+const [showNoteForm,setShowNoteForm]=useState(false);
+const [newNote,setNewNote]=useState({title:'',classLevel:6,subject:'Science',medium:'en',isPremium:false,pages:[{heading:'Page 1',body:''}]});
+const [showQuizForm,setShowQuizForm]=useState(false);
+const [newQuiz,setNewQuiz]=useState({title:'',classLevel:6,subject:'Science',medium:'en',questions:[{q:'',options:['','','',''],correct:0}]});
+const [newAnnouncement,setNewAnnouncement]=useState({text:'',type:'info'});
+const [newRailtest,setNewRailtest]=useState({question:'',answer:'',category:'General'});
+const [openRailId,setOpenRailId]=useState(null);
+
+useEffect(()=>{saveLS(LS_NOTES,notes);},[notes]);
+useEffect(()=>{saveLS(LS_QUIZZES,quizzes);},[quizzes]);
+useEffect(()=>{saveLS(LS_ANN,announcements);},[announcements]);
+useEffect(()=>{saveLS(LS_RAIL,railtest);},[railtest]);
+useEffect(()=>{saveLS(LS_SETTINGS,settings);},[settings]);
+useEffect(()=>{saveLS(LS_PAYMENTS,payments);},[payments]);
+useEffect(()=>{if(adminUnlocked){setSettingsForm({upiId:settings.upiId,upiName:settings.upiName,price:settings.price.toString(),whatsappNumber:settings.whatsappNumber,qrCode:settings.qrCode});}},[adminUnlocked]);
+
+const subjectsList=['Science','Maths','Social Science','Physics','Chemistry','Biology'];
+const classesList=['6','7','8','9','10','11','12'];
+const filteredNotes=notes.filter(n=>(notesMedium==='all'||n.medium===notesMedium)&&(notesClass==='all'||n.classLevel.toString()===notesClass)&&(notesSubject==='all'||n.subject===notesSubject));
+const filteredQuizzes=quizzes.filter(q=>(quizMedium==='all'||q.medium===quizMedium)&&(quizClass==='all'||q.classLevel.toString()===quizClass)&&(quizSubject==='all'||q.subject===quizSubject));
+const freeNotes=notes.filter(n=>!n.isPremium);
+const studyPct=notes.length>0?Math.round((readNotes.length/notes.length)*100):0;
+const subjectProgress=subjectsList.map(sub=>{const sn=notes.filter(n=>n.subject===sub);const done=sn.filter(n=>readNotes.includes(n.id)).length;return{subject:sub,total:sn.length,done,pct:sn.length>0?Math.round(done/sn.length*100):0};}).filter(s=>s.total>0);
+const totalAttempts=quizHistory.length;
+const avgScore=totalAttempts>0?Math.round(quizHistory.reduce((s,h)=>s+(h.score/h.total*100),0)/totalAttempts):0;
+const bestScore=totalAttempts>0?Math.max(...quizHistory.map(h=>Math.round(h.score/h.total*100))):0;
+
+const toggleRead=(id)=>{setReadNotes(prev=>prev.includes(id)?prev.filter(x=>x!==id):[...prev,id]);};
+const handleLogoClick=()=>{const nc=logoClicks+1;setLogoClicks(nc);if(nc>=5){setShowAdmin(true);setLogoClicks(0);alert('🔓 Admin unlocked!');return;}setTimeout(()=>setLogoClicks(0),2000);};
+const openNoteHandler=(note)=>{if(note.isPremium&&!user.isPremium){alert('🔒 Premium note. Premium tab se unlock karein.');return;}setOpenNote(note);setOpenPage(0);};
+const startQuiz=(quiz)=>{setActiveQuiz(quiz);setQuizAnswers({});setQuizSubmitted(false);setQuizScore(0);};
+const submitQuiz=()=>{let s=0;activeQuiz.questions.forEach((q,i)=>{if(quizAnswers[i]===q.correct)s++;});setQuizScore(s);setQuizSubmitted(true);const now=new Date();setQuizHistory(prev=>[...prev,{title:activeQuiz.title,score:s,total:activeQuiz.questions.length,date:now.toLocaleDateString('en-IN')+' '+now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}]);};
+const closeQuiz=()=>{setActiveQuiz(null);setQuizAnswers({});setQuizSubmitted(false);};
+const handleScreenshotChange=(e)=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onloadend=()=>setScreenshotPreview(r.result);r.readAsDataURL(f);};
+const handleQrUpload=(e)=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onloadend=()=>setSettingsForm({...settingsForm,qrCode:r.result});r.readAsDataURL(f);};
+const handlePaymentSubmit=(e)=>{e.preventDefault();if(!screenshotPreview){alert('⚠️ Screenshot upload karein!');return;}if(!/^\d{12}$/.test(utrInput.trim())){alert('⚠️ 12-digit UTR dalein!');return;}setPayments([{id:Date.now(),studentName:user.name,username:user.username,amount:settings.price,utr:utrInput.trim(),screenshot:screenshotPreview,status:'pending'},...payments]);setUtrInput('');setScreenshotPreview(null);alert('✅ Payment submitted!');};
+const verifyPayment=(id,status)=>{setPayments(payments.map(p=>p.id===id?{...p,status}:p));if(status==='approved'){setUser({...user,isPremium:true});alert('🎉 Approved! Premium unlocked!');}};
+const deletePayment=(id)=>{if(!confirm('Payment entry delete karein? (Screenshot bhi hat jayega)'))return;setPayments(payments.filter(p=>p.id!==id));alert('✅ Payment deleted!');};
+const deleteOldPayments=()=>{const oldCount=payments.filter(p=>p.status!=='pending').length;if(oldCount===0){alert('Koi approved/rejected payment nahi hai.');return;}if(!confirm(`${oldCount} approved/rejected payments delete karein? Sirf pending rahenge.`))return;setPayments(payments.filter(p=>p.status==='pending'));alert(`✅ ${oldCount} old payments deleted!`);};
+const handleAdminLogin=(e)=>{e.preventDefault();if(adminLoginPass===adminPassword){setAdminUnlocked(true);setAdminLoginPass('');}else alert('❌ Galat password!');};
+const handlePasswordChange=(e)=>{e.preventDefault();if(passForm.oldPass!==adminPassword){alert('❌ Purana password galat!');return;}if(passForm.newPass.length<6){alert('⚠️ Kam se kam 6 char!');return;}setAdminPassword(passForm.newPass);setPassForm({oldPass:'',newPass:''});alert('✅ Password badal gaya!');};
+const saveSettings=(e)=>{e.preventDefault();setSettings({...settings,upiId:settingsForm.upiId||settings.upiId,upiName:settingsForm.upiName||settings.upiName,price:Number(settingsForm.price)||settings.price,whatsappNumber:settingsForm.whatsappNumber||settings.whatsappNumber,qrCode:settingsForm.qrCode||settings.qrCode});setSettingsSaved(true);setTimeout(()=>setSettingsSaved(false),3000);alert('✅ Settings saved!');};
+
+const addPage=()=>setNewNote({...newNote,pages:[...newNote.pages,{heading:`Page ${newNote.pages.length+1}`,body:''}]});
+const removePage=(i)=>{if(newNote.pages.length<=1){alert('Kam se kam 1 page chahiye');return;}setNewNote({...newNote,pages:newNote.pages.filter((_,idx)=>idx!==i)});};
+const updatePage=(i,field,val)=>{const p=[...newNote.pages];p[i]={...p[i],[field]:val};setNewNote({...newNote,pages:p});};
+const saveNewNote=()=>{if(!newNote.title.trim()){alert('⚠️ Title zaroori hai!');return;}if(newNote.pages.some(p=>!p.heading.trim()||!p.body.trim())){alert('⚠️ Har page ka heading aur body zaroori hai!');return;}const note={...newNote,id:Date.now(),classLevel:Number(newNote.classLevel)};setNotes([note,...notes]);setNewNote({title:'',classLevel:6,subject:'Science',medium:'en',isPremium:false,pages:[{heading:'Page 1',body:''}]});setShowNoteForm(false);alert('✅ Note added!');};
+const deleteNote=(id,title)=>{if(!confirm(`"${title}" delete karna hai?`))return;setNotes(notes.filter(n=>n.id!==id));};
+const addQuestion=()=>setNewQuiz({...newQuiz,questions:[...newQuiz.questions,{q:'',options:['','','',''],correct:0}]});
+const removeQuestion=(i)=>{if(newQuiz.questions.length<=1){alert('Kam se kam 1 question chahiye');return;}setNewQuiz({...newQuiz,questions:newQuiz.questions.filter((_,idx)=>idx!==i)});};
+const updateQuestion=(i,field,val)=>{const q=[...newQuiz.questions];q[i]={...q[i],[field]:val};setNewQuiz({...newQuiz,questions:q});};
+const updateOption=(qi,oi,val)=>{const q=[...newQuiz.questions];const opts=[...q[qi].options];opts[oi]=val;q[qi]={...q[qi],options:opts};setNewQuiz({...newQuiz,questions:q});};
+const saveNewQuiz=()=>{if(!newQuiz.title.trim()){alert('⚠️ Title zaroori hai!');return;}if(newQuiz.questions.some(q=>!q.q.trim()||q.options.some(o=>!o.trim()))){alert('⚠️ Har question + 4 options zaroori!');return;}const quiz={...newQuiz,id:Date.now(),classLevel:Number(newQuiz.classLevel)};setQuizzes([quiz,...quizzes]);setNewQuiz({title:'',classLevel:6,subject:'Science',medium:'en',questions:[{q:'',options:['','','',''],correct:0}]});setShowQuizForm(false);alert('✅ Quiz added!');};
+const deleteQuiz=(id,title)=>{if(!confirm(`"${title}" delete karna hai?`))return;setQuizzes(quizzes.filter(q=>q.id!==id));};
+
+const saveAnnouncement=()=>{if(!newAnnouncement.text.trim()){alert('⚠️ Announcement text zaroori!');return;}const now=new Date();setAnnouncements([{id:Date.now(),text:newAnnouncement.text,type:newAnnouncement.type,date:now.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})},...announcements]);setNewAnnouncement({text:'',type:'info'});alert('✅ Announcement added!');};
+const deleteAnnouncement=(id)=>{if(!confirm('Announcement delete karein?'))return;setAnnouncements(announcements.filter(a=>a.id!==id));};
+
+const saveRailtest=()=>{if(!newRailtest.question.trim()||!newRailtest.answer.trim()){alert('⚠️ Question aur Answer dono zaroori!');return;}setRailtest([{id:Date.now(),...newRailtest},...railtest]);setNewRailtest({question:'',answer:'',category:'General'});alert('✅ Railtest Q&A added!');};
+const deleteRailtest=(id)=>{if(!confirm('Q&A delete karein?'))return;setRailtest(railtest.filter(r=>r.id!==id));};
+
+const resetAllData=()=>{if(!confirm('⚠️ Sab data reset ho jayega. Pakka?'))return;localStorage.removeItem(LS_NOTES);localStorage.removeItem(LS_QUIZZES);localStorage.removeItem(LS_SETTINGS);localStorage.removeItem(LS_PAYMENTS);localStorage.removeItem(LS_ANN);localStorage.removeItem(LS_RAIL);setNotes(INITIAL_NOTES);setQuizzes(INITIAL_QUIZZES);setAnnouncements(INITIAL_ANNOUNCEMENTS);setRailtest(INITIAL_RAILTEST);setSettings({siteName:'EduNotes Premium',price:29,upiId:'9031795956@ybl',upiName:'EduNotes Premium',whatsappNumber:'7488561546',qrCode:''});setPayments([{id:101,studentName:'Amit Kumar',username:'9123456789',amount:29,utr:'431289012345',screenshot:'https://placehold.co/300x500/4f46e5/ffffff?text=UPI+Paid+Rs.29',status:'pending'}]);alert('✅ Data reset!');};
+
+const inputCls='input-premium w-full p-3 rounded-xl text-sm';
+const miniCls='mini-input';
+
+const annColor=(type)=>{if(type==='success')return 'border-emerald-500/50 bg-emerald-500/10';if(type==='important')return 'border-yellow-500/60 bg-yellow-500/10';if(type==='warning')return 'border-rose-500/50 bg-rose-500/10';return 'border-cyan-500/50 bg-cyan-500/10';};
+const annIcon=(type)=>{if(type==='success')return '✅';if(type==='important')return '📢';if(type==='warning')return '⚠️';return 'ℹ️';};
+
+return (
+<div className="min-h-screen">
+<DevBanner/>
+<header className="sticky top-0 z-40 glass-dark border-b border-yellow-500/20 shadow-2xl">
+<div className="max-w-6xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-2">
+<div className="flex items-center gap-2 font-black text-lg cursor-pointer select-none" onClick={handleLogoClick}>
+<span className="bg-gradient-to-r from-yellow-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">📚 {settings.siteName}</span>
+{user.isPremium&&<span className="premium-badge">🌟 PRO</span>}
+</div>
+<nav className="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm">
+{[{id:'home',label:'📊 Home'},{id:'notes',label:'📖 Notes'},{id:'quiz',label:'🎯 Quiz'},{id:'railtest',label:'🚂 Railtest'},{id:'premium',label:'💎 Premium'},...(showAdmin?[{id:'admin',label:'⚙️ Admin'}]:[])].map(t=>(
+<button key={t.id} onClick={()=>setActiveTab(t.id)} className={`tab-btn px-3 py-2 rounded-xl font-bold text-white/90 ${activeTab===t.id?'tab-active':''}`}>{t.label}</button>
+))}
+</nav>
+</div>
+</header>
+
+{announcements.length>0&&(
+<div className="bg-gradient-to-r from-yellow-500/20 via-purple-500/20 to-pink-500/20 border-y border-yellow-500/30 overflow-hidden py-2">
+<div className="whitespace-nowrap"><span className="announce-ticker text-sm font-bold text-yellow-200">📢 {announcements.map(a=>a.text).join('     •     ')}</span></div>
+</div>
+)}
+
+<main className="max-w-6xl mx-auto p-4 sm:p-6 space-y-14 pb-20">
+
+{activeTab==='home'&&(
+<>
+<section className="hero-glow rounded-3xl p-10 sm:p-16 glass relative overflow-hidden">
+<div className="relative z-10">
+<p className="text-xs font-black tracking-[0.3em] text-yellow-400 mb-3">✦ PREMIUM LEARNING PLATFORM ✦</p>
+<h1 className="text-4xl sm:text-6xl font-black mb-5 leading-tight"><span className="bg-gradient-to-r from-yellow-300 via-pink-300 to-purple-300 bg-clip-text text-transparent">🎓 Welcome to<br/>EduNotes Premium</span></h1>
+<p className="text-lg opacity-90 mb-3 text-white/80">Class 6–12 के English + Hindi medium Notes और Quizzes।</p>
+<p className="text-base opacity-75 mb-8 text-yellow-200/80">📚 {notes.length} Notes • 🎯 {quizzes.length} Quizzes • 🚂 {railtest.length} Railtest Q&A</p>
+<div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<button onClick={()=>setActiveTab('notes')} className="btn-gold rounded-2xl py-4 text-base">📖 Notes</button>
+<button onClick={()=>setActiveTab('quiz')} className="btn-purple rounded-2xl py-4 text-base">🎯 Quiz</button>
+<button onClick={()=>setActiveTab('railtest')} className="btn-orange rounded-2xl py-4 text-base">🚂 Railtest</button>
+<button onClick={()=>setActiveTab('premium')} className="btn-gold rounded-2xl py-4 text-base">💎 Premium</button>
+</div>
+</div>
+</section>
+
+{announcements.length>0&&(
+<section className="space-y-3">
+<h2 className="text-2xl font-black text-center"><span className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">📢 LATEST ANNOUNCEMENTS</span></h2>
+{announcements.slice(0,3).map(a=>(
+<div key={a.id} className={`rounded-2xl p-4 border-l-4 backdrop-blur-md ${annColor(a.type)}`}>
+<div className="flex items-start gap-3">
+<span className="text-2xl">{annIcon(a.type)}</span>
+<div className="flex-1"><p className="text-sm text-white font-semibold">{a.text}</p><p className="text-xs opacity-50 mt-1">{a.date}</p></div>
+</div>
+</div>
+))}
+</section>
+)}
+
+<section className="glass rounded-3xl p-8 sm:p-10">
+<h2 className="text-2xl sm:text-3xl font-black mb-8 text-center"><span className="bg-gradient-to-r from-yellow-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">📊 LIVE PROGRESS DASHBOARD</span></h2>
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div className="glass-dark rounded-2xl p-6 border border-yellow-500/30"><h3 className="text-base font-black mb-4 text-center text-yellow-300">📖 पढ़ाई का Progress</h3><StudyCircleChart percent={studyPct} done={readNotes.length} total={notes.length}/></div>
+<div className="glass-dark rounded-2xl p-6 border border-purple-500/30"><h3 className="text-base font-black mb-4 text-center text-purple-300">🎯 Quiz Results</h3><QuizResultsChart history={quizHistory}/></div>
+</div>
+</section>
+
+<section>
+<h2 className="text-2xl font-black mb-6 text-center"><span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">📈 OVERALL STATS</span></h2>
+<div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+{[{v:notes.length,l:'Total Notes',g:'from-yellow-500 to-orange-500'},{v:quizzes.length,l:'Total Quizzes',g:'from-purple-500 to-pink-500'},{v:railtest.length,l:'Railtest Q&A',g:'from-orange-500 to-red-500'},{v:notes.filter(n=>n.isPremium).length,l:'Premium',g:'from-cyan-500 to-blue-500'}].map((c,i)=>(
+<div key={i} className={`stat-card rounded-2xl p-6 bg-gradient-to-br ${c.g} text-white text-center shadow-2xl border border-white/20`}><p className="text-4xl sm:text-5xl font-black">{c.v}</p><p className="text-xs font-bold mt-2 tracking-wider uppercase">{c.l}</p></div>
+))}
+</div>
+</section>
+
+<section>
+<h2 className="text-2xl font-black mb-6 text-center"><span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">🎯 QUIZ PERFORMANCE</span></h2>
+<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<div className="glass rounded-2xl p-6 text-center border border-blue-500/30"><p className="text-xs font-black uppercase text-blue-300 mb-2 tracking-widest">Total Attempts</p><p className="text-5xl font-black text-blue-400">{totalAttempts}</p></div>
+<div className="glass rounded-2xl p-6 text-center border border-amber-500/30"><p className="text-xs font-black uppercase text-amber-300 mb-2 tracking-widest">Average Score</p><p className="text-5xl font-black text-amber-400">{avgScore}%</p></div>
+<div className="glass rounded-2xl p-6 text-center border border-emerald-500/30"><p className="text-xs font-black uppercase text-emerald-300 mb-2 tracking-widest">Best Score</p><p className="text-5xl font-black text-emerald-400">{bestScore}%</p></div>
+</div>
+</section>
+
+<section className="glass rounded-3xl p-8">
+<div className="flex justify-between items-center mb-6 flex-wrap gap-3">
+<h2 className="text-2xl font-black bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">🎁 Free Notes</h2>
+<button onClick={()=>{setNotesMedium('all');setNotesClass('all');setNotesSubject('all');setActiveTab('notes');}} className="btn-emerald px-4 py-2 rounded-xl text-sm">View All →</button>
+</div>
+{freeNotes.length===0?(<p className="text-center text-white/60 py-4">Koi free note nahi.</p>):(
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+{freeNotes.slice(0,3).map(note=>(
+<div key={note.id} className="card-premium rounded-2xl overflow-hidden">
+<div className={`p-3 bg-gradient-to-r ${note.medium==='en'?'from-cyan-500 to-blue-600':'from-orange-500 to-pink-600'} text-white`}><div className="flex justify-between text-xs font-black"><span>Class {note.classLevel} • {note.subject}</span><span>{note.medium==='en'?'EN':'हिन्दी'}</span></div></div>
+<div className="p-5"><h4 className="font-bold text-sm mb-3 text-white">{note.title}</h4><p className="text-xs opacity-60 mb-4 text-white/70">📄 {note.pages.length} Pages • ✅ Free {readNotes.includes(note.id)&&'• ✔ Read'}</p>
+<div className="flex gap-2"><button onClick={()=>openNoteHandler(note)} className="btn-emerald flex-1 py-2.5 rounded-xl text-xs">📄 Read</button><button onClick={()=>toggleRead(note.id)} className={`px-3 py-2.5 rounded-xl text-xs font-bold border-2 ${readNotes.includes(note.id)?'bg-emerald-500 text-white border-emerald-400':'border-white/20 text-white/60 hover:border-yellow-400'}`}>{readNotes.includes(note.id)?'✅':'⬜'}</button></div></div>
+</div>
+))}
+</div>
+)}
+</section>
+
+<section className="glass rounded-3xl p-8">
+<h2 className="text-2xl font-black mb-6 bg-gradient-to-r from-purple-400 to-fuchsia-400 bg-clip-text text-transparent">📚 Subject-wise Reading Progress</h2>
+<div className="space-y-5">
+{subjectProgress.length===0?(<p className="text-center opacity-60 py-4 text-white/60">Abhi koi note read nahi kiya.</p>):(
+subjectProgress.map(sp=>(
+<div key={sp.subject}><div className="flex justify-between text-sm font-bold mb-2 text-white"><span>{sp.subject} ({sp.done}/{sp.total})</span><span className="text-purple-400">{sp.pct}%</span></div><div className="w-full h-3 bg-black/40 rounded-full overflow-hidden border border-white/10"><div className="h-full rounded-full transition-all" style={{width:`${sp.pct}%`,background:'linear-gradient(90deg,#a855f7,#ec4899,#ffd700)',boxShadow:'0 0 12px rgba(255,215,0,0.4)'}}/></div></div>
+))
+)}
+</div>
+</section>
+
+<section className="glass rounded-3xl p-8 sm:p-10 text-center relative overflow-hidden">
+<div className="absolute inset-0 opacity-30" style={{background:'radial-gradient(circle at 50% 50%,rgba(255,215,0,0.4),transparent 70%)'}}/>
+<div className="relative"><p className="text-5xl mb-4">💡</p><h2 className="text-2xl font-black mb-4 bg-gradient-to-r from-yellow-400 to-pink-400 bg-clip-text text-transparent">DAILY MOTIVATION</h2><p className="text-xl text-white/90 italic max-w-2xl mx-auto">"Success is the sum of small efforts, repeated day in and day out."</p><p className="text-sm text-yellow-400 mt-3 font-bold">— Robert Collier</p></div>
+</section>
+
+<section>
+<h2 className="text-2xl font-black mb-8 text-center"><span className="bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 bg-clip-text text-transparent">🌟 WHY CHOOSE EDUNOTES?</span></h2>
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+{[{icon:'📖',title:'Bilingual Notes',desc:'English और हिन्दी दोनों medium'},{icon:'🎯',title:'Interactive Quizzes',desc:'खुद को test करें हर chapter के बाद'},{icon:'🚂',title:'Railtest Q&A',desc:'Railway exam prep — सवाल-जवाब'},{icon:'📊',title:'Progress Tracking',desc:'Circle + Bar graphs में पढ़ाई देखें'},{icon:'💎',title:'Premium Content',desc:'₹29/month में premium unlock'},{icon:'📱',title:'Mobile Friendly',desc:'हर device पर smooth experience'}].map((f,i)=>(
+<div key={i} className="card-premium rounded-2xl p-6 text-center"><p className="text-5xl mb-3" style={{filter:'drop-shadow(0 0 15px rgba(255,215,0,0.5))'}}>{f.icon}</p><h3 className="font-black text-base mb-2 bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-transparent">{f.title}</h3><p className="text-sm text-white/70">{f.desc}</p></div>
+))}
+</div>
+</section>
+
+<section>
+<h2 className="text-2xl font-black mb-8 text-center"><span className="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">💬 WHAT STUDENTS SAY</span></h2>
+<div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+{[{name:'Priya S.',cls:'Class 10',text:'Bahut helpful notes hain! Hindi medium mein padhna asan ho gaya.',emoji:'👩‍🎓'},{name:'Rohit K.',cls:'Class 12',text:'Quiz feature amazing hai — real exam jaisa feel hota hai!',emoji:'👨‍🎓'},{name:'Anjali M.',cls:'Railway Aspirant',text:'Railtest section ne meri RRB preparation bahut easy kar di!',emoji:'🚂'}].map((t,i)=>(
+<div key={i} className="card-premium rounded-2xl p-6"><div className="flex items-center gap-3 mb-3"><span className="text-4xl">{t.emoji}</span><div><p className="font-bold text-white text-sm">{t.name}</p><p className="text-xs text-yellow-400">{t.cls}</p></div></div><p className="text-sm text-white/70 italic">"{t.text}"</p><div className="text-yellow-400 mt-2">⭐⭐⭐⭐⭐</div></div>
+))}
+</div>
+</section>
+
+<section className="glass rounded-3xl p-8">
+<h2 className="text-2xl font-black mb-6 text-center"><span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">📝 STUDY TIPS</span></h2>
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+{[{icon:'⏰',title:'25-5 Pomodoro',desc:'25 min padho, 5 min break lo. Focus double ho jayega.'},{icon:'📝',title:'Notes Likho',desc:'Padhte waqt apne shabdon mein notes banayein.'},{icon:'🔁',title:'Revision Karo',desc:'Har chapter ko 3 baar revise karo — pehle din, 3rd din, 7th din.'},{icon:'💧',title:'Hydrated Raho',desc:'Padhai ke dauraan paani peete raho, dimaag fresh rahega.'},{icon:'😴',title:'7-8 Ghante Neend',desc:'Proper sleep se memory strong hoti hai.'},{icon:'🧘',title:'Meditation',desc:'10 min daily dhyan — stress kam, focus zyada.'}].map((t,i)=>(
+<div key={i} className="p-4 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-400/50 transition-all"><p className="text-3xl mb-2">{t.icon}</p><p className="font-bold text-white text-sm mb-1">{t.title}</p><p className="text-xs text-white/60">{t.desc}</p></div>
+))}
+</div>
+</section>
+
+{railtest.length>0&&(
+<section className="glass rounded-3xl p-8 border border-orange-500/30">
+<div className="flex justify-between items-center mb-6 flex-wrap gap-3">
+<h2 className="text-2xl font-black bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">🚂 Railtest — Q&A Preview</h2>
+<button onClick={()=>setActiveTab('railtest')} className="btn-orange px-4 py-2 rounded-xl text-sm">View All →</button>
+</div>
+<div className="space-y-3">
+{railtest.slice(0,3).map(r=>(
+<div key={r.id} className="p-4 rounded-xl bg-white/5 border border-white/10">
+<p className="text-xs text-orange-400 font-black mb-1">Q: {r.question}</p>
+<p className="text-sm text-white/70"><strong className="text-emerald-400">A:</strong> {r.answer}</p>
+</div>
+))}
+</div>
+</section>
+)}
+
+<section className="rounded-3xl p-10 sm:p-14 text-center relative overflow-hidden" style={{background:'linear-gradient(135deg,#a855f7 0%,#ec4899 50%,#ffd700 100%)'}}>
+<div className="absolute inset-0" style={{background:'radial-gradient(circle at 30% 50%,rgba(255,255,255,0.3),transparent 70%)'}}/>
+<div className="relative z-10"><h2 className="text-3xl sm:text-4xl font-black mb-4 text-white">🚀 Ready to Start Learning?</h2><p className="text-lg opacity-95 mb-7 text-white">अभी शुरू करें — पहला कदम आपका इंतज़ार कर रहा है!</p><button onClick={()=>setActiveTab('notes')} className="bg-white text-purple-700 font-black px-8 py-4 rounded-2xl text-lg hover:scale-105 transition shadow-2xl">📖 Start Reading Now</button></div>
+</section>
+
+<section className="glass rounded-3xl p-8">
+<h2 className="text-2xl font-black mb-6 text-center bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">❓ FAQ</h2>
+<div>
+<details className="faq-item"><summary>Premium notes कैसे unlock करें?</summary><p>Premium tab → UPI से ₹29 pay → 12-digit UTR + screenshot upload → Admin approve → unlock!</p></details>
+<details className="faq-item"><summary>Railtest section क्या है?</summary><p>Railway exams (RRB, NTPC, Group D) की तैयारी के लिए Q&A bank। Admin questions add करता है, आप answer देख सकते हैं।</p></details>
+<details className="faq-item"><summary>Progress कैसे track होती है?</summary><p>Note पढ़ने के बाद "Mark as Read" click करें → Circle graph update। Quiz देने के बाद bar graph में score।</p></details>
+<details className="faq-item"><summary>Support कैसे मिलेगा?</summary><p>नीचे हरा WhatsApp button click करें — सीधे admin से बात करें।</p></details>
+<details className="faq-item"><summary>Notes किस class के लिए?</summary><p>Class 6 से 12 — Science, Maths, Physics, Chemistry, Biology, Social Science।</p></details>
+<details className="faq-item"><summary>नए notes कैसे add करें?</summary><p>Admin panel (logo 5 click + password) → Manage Notes → Add New Note।</p></details>
+</div>
+</section>
+
+<section className="glass rounded-3xl p-8 text-center">
+<h2 className="text-2xl font-black mb-4 bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">📞 CONTACT & SUPPORT</h2>
+<p className="text-white/70 mb-4">Koi bhi sawaal, suggestion ya help ke liye WhatsApp pe message karein</p>
+<a href={`https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent('Hello, mujhe EduNotes Premium ke baare mein help chahiye.')}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 btn-emerald px-6 py-3 rounded-xl font-black text-white"><span>💬 WhatsApp Support</span></a>
+</section>
+</>
+)}
+
+{activeTab==='notes'&&(
+<>
+<section className="glass rounded-3xl p-6 sm:p-8">
+<h2 className="text-3xl font-black mb-6 bg-gradient-to-r from-yellow-400 to-pink-400 bg-clip-text text-transparent">📖 Notes – Class 6 to 12</h2>
+<div className="space-y-3">
+<div className="flex flex-wrap items-center gap-2"><span className="font-black text-xs uppercase tracking-widest text-yellow-400">Medium:</span>{[{v:'all',l:'All'},{v:'en',l:'English'},{v:'hi',l:'हिन्दी'}].map(m=>(<button key={m.v} onClick={()=>setNotesMedium(m.v)} className={`px-4 py-2 rounded-xl text-xs font-black ${notesMedium===m.v?'btn-gold':'bg-white/5 border border-white/10 text-white/70 hover:border-yellow-400'}`}>{m.l}</button>))}</div>
+<div className="flex flex-wrap items-center gap-2"><span className="font-black text-xs uppercase tracking-widest text-yellow-400">Class:</span>{['all',...classesList].map(c=>(<button key={c} onClick={()=>setNotesClass(c)} className={`px-4 py-2 rounded-xl text-xs font-black ${notesClass===c?'btn-gold':'bg-white/5 border border-white/10 text-white/70 hover:border-yellow-400'}`}>{c==='all'?'All':`Class ${c}`}</button>))}</div>
+<div className="flex flex-wrap items-center gap-2"><span className="font-black text-xs uppercase tracking-widest text-yellow-400">Subject:</span>{['all',...subjectsList].map(s=>(<button key={s} onClick={()=>setNotesSubject(s)} className={`px-4 py-2 rounded-xl text-xs font-black ${notesSubject===s?'btn-gold':'bg-white/5 border border-white/10 text-white/70 hover:border-yellow-400'}`}>{s==='all'?'All':s}</button>))}</div>
+</div>
+</section>
+{filteredNotes.length===0?(<p className="glass rounded-2xl p-10 text-center text-white/70">Koi note nahi mila.</p>):(
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+{filteredNotes.map(note=>(
+<div key={note.id} className="card-premium rounded-2xl overflow-hidden">
+<div className={`p-3 bg-gradient-to-r ${note.medium==='en'?'from-cyan-500 to-blue-600':'from-orange-500 to-pink-600'} text-white relative`}><div className="flex justify-between text-xs font-black"><span>Class {note.classLevel} • {note.subject}</span><span>{note.medium==='en'?'EN':'हिन्दी'}</span></div>{note.isPremium&&<div className="absolute top-2 right-2 bg-yellow-400 text-black text-[9px] font-black px-2 py-0.5 rounded-full shadow-lg">👑 PRO</div>}</div>
+<div className="p-5"><h4 className="font-bold text-base mb-2 text-white">{note.title}</h4><p className="text-xs opacity-60 mb-4 text-white/70">📄 {note.pages.length} Pages • {note.isPremium?'🔒 Premium':'✅ Free'} {readNotes.includes(note.id)&&'• ✔ Read'}</p>
+<button onClick={()=>openNoteHandler(note)} className={`w-full py-2.5 rounded-xl font-bold text-sm mb-2 ${note.isPremium&&!user.isPremium?'btn-gold':'btn-emerald'}`}>{note.isPremium&&!user.isPremium?`🔓 Unlock @ ₹${settings.price}`:'📄 Read Notes'}</button>
+<button onClick={()=>toggleRead(note.id)} className={`w-full py-2 rounded-xl font-black text-xs border-2 ${readNotes.includes(note.id)?'bg-emerald-500 text-white border-emerald-400':'border-white/20 text-white/60 hover:border-yellow-400'}`}>{readNotes.includes(note.id)?'✅ Marked as Read':'⬜ Mark as Read'}</button>
+</div>
+</div>
+))}
+</div>
+)}
+</>
+)}
+
+{activeTab==='quiz'&&(
+<>
+<section className="glass rounded-3xl p-6 sm:p-8">
+<h2 className="text-3xl font-black mb-6 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">🎯 Quiz – Class 6 to 12</h2>
+<div className="space-y-3">
+<div className="flex flex-wrap items-center gap-2"><span className="font-black text-xs uppercase tracking-widest text-emerald-400">Medium:</span>{[{v:'all',l:'All'},{v:'en',l:'English'},{v:'hi',l:'हिन्दी'}].map(m=>(<button key={m.v} onClick={()=>setQuizMedium(m.v)} className={`px-4 py-2 rounded-xl text-xs font-black ${quizMedium===m.v?'btn-emerald':'bg-white/5 border border-white/10 text-white/70 hover:border-emerald-400'}`}>{m.l}</button>))}</div>
+<div className="flex flex-wrap items-center gap-2"><span className="font-black text-xs uppercase tracking-widest text-emerald-400">Class:</span>{['all',...classesList].map(c=>(<button key={c} onClick={()=>setQuizClass(c)} className={`px-4 py-2 rounded-xl text-xs font-black ${quizClass===c?'btn-emerald':'bg-white/5 border border-white/10 text-white/70 hover:border-emerald-400'}`}>{c==='all'?'All':`Class ${c}`}</button>))}</div>
+<div className="flex flex-wrap items-center gap-2"><span className="font-black text-xs uppercase tracking-widest text-emerald-400">Subject:</span>{['all',...subjectsList].map(s=>(<button key={s} onClick={()=>setQuizSubject(s)} className={`px-4 py-2 rounded-xl text-xs font-black ${quizSubject===s?'btn-emerald':'bg-white/5 border border-white/10 text-white/70 hover:border-emerald-400'}`}>{s==='all'?'All':s}</button>))}</div>
+</div>
+</section>
+{filteredQuizzes.length===0?(<p className="glass rounded-2xl p-10 text-center text-white/70">Koi quiz nahi mila.</p>):(
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+{filteredQuizzes.map(q=>(
+<div key={q.id} className="card-premium rounded-2xl overflow-hidden">
+<div className="p-3 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white"><div className="flex justify-between text-xs font-black"><span>Class {q.classLevel} • {q.subject}</span><span>{q.medium==='en'?'EN':'हिन्दी'}</span></div></div>
+<div className="p-5"><h4 className="font-bold mb-2 text-white">{q.title}</h4><p className="text-xs opacity-60 mb-4 text-white/70">❓ {q.questions.length} Questions</p><button onClick={()=>startQuiz(q)} className="btn-emerald w-full py-2.5 rounded-xl text-sm">▶️ Start Quiz</button></div>
+</div>
+))}
+</div>
+)}
+</>
+)}
+
+{activeTab==='railtest'&&(
+<>
+<section className="glass rounded-3xl p-8 border border-orange-500/30">
+<div className="text-center"><p className="text-5xl mb-3">🚂</p><h2 className="text-3xl font-black mb-2 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">RAILTEST — Q&A Section</h2><p className="text-sm text-white/70 mb-2">Railway Exams (RRB, NTPC, Group D) की तैयारी के लिए Questions & Answers</p><p className="text-xs text-yellow-400">Total: {railtest.length} Q&A • Click karke answer dekhein</p></div>
+</section>
+{railtest.length===0?(<p className="glass rounded-2xl p-10 text-center text-white/70">Koi Q&A nahi. Admin panel se add karein.</p>):(
+<div className="space-y-3">
+{railtest.map(r=>(
+<div key={r.id} className="glass rounded-2xl overflow-hidden border border-orange-500/20 hover:border-orange-400/50 transition-all">
+<button onClick={()=>setOpenRailId(openRailId===r.id?null:r.id)} className="w-full p-4 flex items-start gap-3 text-left">
+<div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center font-black text-sm">Q</div>
+<div className="flex-1"><p className="font-bold text-white text-sm sm:text-base">{r.question}</p><p className="text-xs text-orange-400 mt-1">📁 {r.category}</p></div>
+<div className="text-2xl text-yellow-400 transition-transform" style={{transform:openRailId===r.id?'rotate(180deg)':'rotate(0deg)'}}>▼</div>
+</button>
+<div className={`railtest-answer ${openRailId===r.id?'open':''}`}>
+<div className="flex items-start gap-3 pt-3 border-t border-white/10">
+<div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center font-black text-sm">A</div>
+<p className="flex-1 text-white/85 text-sm leading-relaxed">{r.answer}</p>
+</div>
+</div>
+</div>
+))}
+</div>
+)}
+</>
+)}
+
+{activeTab==='premium'&&(
+<section className="glass rounded-3xl p-8 max-w-2xl mx-auto">
+<h2 className="text-3xl font-black mb-2 bg-gradient-to-r from-yellow-400 via-pink-400 to-purple-400 bg-clip-text text-transparent text-center">💎 PREMIUM – ₹{settings.price}/Month</h2>
+<p className="text-sm opacity-80 mb-6 text-center text-white/70">सारे premium notes unlock करने के लिए UPI payment करें</p>
+{settings.qrCode?(<div className="p-5 rounded-2xl bg-white border-2 border-yellow-400 mb-6 text-center shadow-2xl"><img src={settings.qrCode} alt="QR" className="mx-auto h-64 w-64 object-contain rounded-xl"/><p className="text-sm mt-3 font-black text-slate-800">📱 Scan QR to pay ₹{settings.price}</p></div>):(<div className="p-5 rounded-2xl bg-white/5 border border-white/10 mb-6 text-center"><p className="text-xs opacity-60 text-white/70">QR code admin ne abhi upload nahi kiya</p></div>)}
+<div className="p-5 rounded-2xl bg-gradient-to-r from-yellow-500/10 to-purple-500/10 border border-yellow-500/30 mb-6 text-sm space-y-2 text-white"><p><strong className="text-yellow-400">UPI ID:</strong> {settings.upiId}</p><p><strong className="text-yellow-400">Name:</strong> {settings.upiName}</p><p><strong className="text-yellow-400">Amount:</strong> ₹{settings.price}</p></div>
+{user.isPremium?(<div className="p-6 rounded-2xl bg-emerald-500/15 border-2 border-emerald-400 text-center font-black text-emerald-300 text-lg">✅ PREMIUM ACTIVE!</div>):(
+<form onSubmit={handlePaymentSubmit} className="space-y-5">
+<div><label className="block text-sm font-black mb-2 text-yellow-400">1. 12-Digit UTR Number *</label><input type="text" maxLength={12} value={utrInput} onChange={e=>setUtrInput(e.target.value.replace(/\D/g,''))} className={inputCls} placeholder="Enter 12-digit UTR"/><p className="text-xs opacity-60 mt-1 text-white/60">{utrInput.length}/12</p></div>
+<div><label className="block text-sm font-black mb-2 text-yellow-400">2. Payment Screenshot *</label><input type="file" accept="image/*" onChange={handleScreenshotChange} className="w-full p-3 rounded-xl border border-white/20 bg-black/30 text-white text-sm file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-yellow-400 file:text-black file:font-black file:cursor-pointer"/>{screenshotPreview&&<img src={screenshotPreview} className="mt-3 h-40 rounded-xl border-2 border-emerald-400" alt="preview"/>}</div>
+<button type="submit" disabled={!screenshotPreview||utrInput.length<12} className={`w-full py-4 rounded-xl font-black text-base ${(!screenshotPreview||utrInput.length<12)?'bg-white/10 text-white/40 cursor-not-allowed':'btn-gold'}`}>🚀 Submit for Approval</button>
+</form>
+)}
+</section>
+)}
+
+{activeTab==='admin'&&!adminUnlocked&&(
+<section className="glass rounded-3xl p-8 max-w-md mx-auto">
+<h2 className="text-2xl font-black mb-4 text-center text-yellow-400">🔐 ADMIN LOGIN</h2>
+<form onSubmit={handleAdminLogin} className="space-y-4"><input type="password" value={adminLoginPass} onChange={e=>setAdminLoginPass(e.target.value)} placeholder="Admin Password" className={inputCls}/><button className="btn-purple w-full py-3 rounded-xl">Unlock</button></form>
+</section>
+)}
+
+{activeTab==='admin'&&adminUnlocked&&(
+<div className="space-y-6">
+<div className="flex justify-between items-center flex-wrap gap-2">
+<h2 className="text-2xl font-black bg-gradient-to-r from-yellow-400 to-pink-400 bg-clip-text text-transparent">⚙️ ADMIN PANEL</h2>
+<button onClick={()=>setAdminUnlocked(false)} className="px-4 py-2 rounded-xl bg-rose-600 text-white text-xs font-black shadow-lg">🔒 Lock</button>
+</div>
+
+<div className="glass rounded-2xl p-2 flex flex-wrap gap-2">
+{[{id:'settings',label:'💰 Settings'},{id:'announcements',label:'📢 Announcements'},{id:'notes',label:'📖 Notes'},{id:'quizzes',label:'🎯 Quizzes'},{id:'railtest',label:'🚂 Railtest'},{id:'payments',label:'📸 Payments'},{id:'password',label:'🔐 Password'},{id:'reset',label:'🗑️ Reset'}].map(t=>(
+<button key={t.id} onClick={()=>setAdminTab(t.id)} className={`px-3 py-2.5 rounded-xl text-xs sm:text-sm font-black transition-all ${adminTab===t.id?'admin-tab-active':'bg-white/5 border border-white/10 text-white/70 hover:border-yellow-400'}`}>{t.label}</button>
+))}
+</div>
+
+{adminTab==='settings'&&(
+<section className="glass rounded-2xl p-6 border border-cyan-500/30">
+<h3 className="text-xl font-black mb-5 bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">💰 Payment Settings</h3>
+<form onSubmit={saveSettings} className="space-y-4 text-sm">
+<div><label className="font-black block mb-2 text-cyan-400 text-xs uppercase tracking-widest">UPI ID</label><input type="text" value={settingsForm.upiId} onChange={e=>setSettingsForm({...settingsForm,upiId:e.target.value})} placeholder="example@ybl" className={inputCls}/></div>
+<div><label className="font-black block mb-2 text-cyan-400 text-xs uppercase tracking-widest">UPI Holder Name</label><input type="text" value={settingsForm.upiName} onChange={e=>setSettingsForm({...settingsForm,upiName:e.target.value})} className={inputCls}/></div>
+<div><label className="font-black block mb-2 text-cyan-400 text-xs uppercase tracking-widest">Price (₹)</label><input type="number" value={settingsForm.price} onChange={e=>setSettingsForm({...settingsForm,price:e.target.value})} className={inputCls}/></div>
+<div><label className="font-black block mb-2 text-cyan-400 text-xs uppercase tracking-widest">WhatsApp Number</label><input type="text" value={settingsForm.whatsappNumber} onChange={e=>setSettingsForm({...settingsForm,whatsappNumber:e.target.value.replace(/\D/g,'')})} className={inputCls}/></div>
+<div><label className="font-black block mb-2 text-cyan-400 text-xs uppercase tracking-widest">UPI QR Code Image</label><input type="file" accept="image/*" onChange={handleQrUpload} className="w-full p-3 rounded-xl border border-white/20 bg-black/30 text-white text-sm file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-cyan-400 file:text-black file:font-black file:cursor-pointer"/>
+{settingsForm.qrCode&&(<div className="mt-3 flex items-center gap-3"><img src={settingsForm.qrCode} className="h-32 w-32 rounded-xl border-2 border-emerald-400" alt="qr"/><button type="button" onClick={()=>setSettingsForm({...settingsForm,qrCode:''})} className="px-3 py-2 bg-rose-500 text-white rounded-lg text-xs font-black">Remove</button></div>)}
+</div>
+<button type="submit" className="btn-cyan w-full py-3 rounded-xl">💾 Save Settings</button>
+{settingsSaved&&<p className="text-center text-emerald-400 font-black text-xs">✅ Saved!</p>}
+</form>
+</section>
+)}
+
+{adminTab==='announcements'&&(
+<section className="glass rounded-2xl p-6 border border-yellow-500/30">
+<h3 className="text-xl font-black mb-5 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">📢 Manage Announcements ({announcements.length})</h3>
+<div className="p-4 rounded-2xl bg-black/30 border border-yellow-500/30 mb-5 space-y-3">
+<h4 className="font-black text-yellow-400 text-sm">➕ New Announcement</h4>
+<textarea placeholder="Announcement text..." value={newAnnouncement.text} onChange={e=>setNewAnnouncement({...newAnnouncement,text:e.target.value})} rows={3} className={miniCls}></textarea>
+<select value={newAnnouncement.type} onChange={e=>setNewAnnouncement({...newAnnouncement,type:e.target.value})} className={miniCls}>
+<option value="info" className="bg-slate-800">ℹ️ Info (Cyan)</option>
+<option value="success" className="bg-slate-800">✅ Success (Green)</option>
+<option value="important" className="bg-slate-800">📢 Important (Yellow)</option>
+<option value="warning" className="bg-slate-800">⚠️ Warning (Red)</option>
+</select>
+<button onClick={saveAnnouncement} className="btn-gold w-full py-2.5 rounded-xl text-sm">✅ Post Announcement</button>
+</div>
+<div className="space-y-2 max-h-96 overflow-y-auto pr-2">
+{announcements.map(a=>(
+<div key={a.id} className={`flex items-center justify-between gap-3 p-3 rounded-xl border-l-4 ${annColor(a.type)}`}>
+<div className="flex-1 min-w-0"><p className="text-sm font-bold text-white">{a.text}</p><p className="text-xs text-white/50 mt-1">{a.date} • {a.type}</p></div>
+<button onClick={()=>deleteAnnouncement(a.id)} className="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-xs font-black flex-shrink-0">🗑️</button>
+</div>
+))}
+{announcements.length===0&&<p className="text-center text-white/50 py-4">Koi announcement nahi.</p>}
+</div>
+</section>
+)}
+
+{adminTab==='notes'&&(
+<div className="space-y-6">
+<section className="glass rounded-2xl p-6 border border-yellow-500/30">
+<div className="flex justify-between items-center flex-wrap gap-3 mb-5">
+<h3 className="text-xl font-black bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">📖 Manage Notes ({notes.length})</h3>
+<button onClick={()=>setShowNoteForm(!showNoteForm)} className={`px-5 py-2.5 rounded-xl font-black text-sm ${showNoteForm?'bg-rose-600 text-white':'btn-gold'}`}>{showNoteForm?'✕ Cancel':'➕ Add New Note'}</button>
+</div>
+{showNoteForm&&(
+<div className="p-5 rounded-2xl bg-black/30 border border-yellow-500/30 mb-5 space-y-4">
+<h4 className="font-black text-yellow-400 text-sm">➕ New Note</h4>
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+<input type="text" placeholder="Note Title *" value={newNote.title} onChange={e=>setNewNote({...newNote,title:e.target.value})} className={miniCls}/>
+<select value={newNote.classLevel} onChange={e=>setNewNote({...newNote,classLevel:e.target.value})} className={miniCls}>{classesList.map(c=><option key={c} value={c} className="bg-slate-800">Class {c}</option>)}</select>
+<select value={newNote.subject} onChange={e=>setNewNote({...newNote,subject:e.target.value})} className={miniCls}>{subjectsList.map(s=><option key={s} value={s} className="bg-slate-800">{s}</option>)}</select>
+<select value={newNote.medium} onChange={e=>setNewNote({...newNote,medium:e.target.value})} className={miniCls}><option value="en" className="bg-slate-800">English</option><option value="hi" className="bg-slate-800">हिन्दी</option></select>
+</div>
+<label className="flex items-center gap-2 text-sm font-bold text-white/80 cursor-pointer"><input type="checkbox" checked={newNote.isPremium} onChange={e=>setNewNote({...newNote,isPremium:e.target.checked})} className="w-4 h-4 accent-yellow-400"/>Mark as Premium 🔒</label>
+<div className="border-t border-white/10 pt-4">
+<div className="flex justify-between items-center mb-3"><h5 className="font-black text-white text-sm">📄 Pages ({newNote.pages.length})</h5><button onClick={addPage} className="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-black">➕ Add Page</button></div>
+<div className="space-y-3 max-h-96 overflow-y-auto pr-2">
+{newNote.pages.map((pg,idx)=>(
+<div key={idx} className="p-3 rounded-xl bg-white/5 border border-white/10">
+<div className="flex justify-between items-center mb-2"><span className="text-xs font-black text-yellow-400">Page {idx+1}</span>{newNote.pages.length>1&&<button onClick={()=>removePage(idx)} className="text-xs text-rose-400 font-black">🗑️ Remove</button>}</div>
+<input type="text" placeholder="Page heading" value={pg.heading} onChange={e=>updatePage(idx,'heading',e.target.value)} className={miniCls+' mb-2'}/>
+<textarea placeholder="Page content (HTML allowed)" value={pg.body} onChange={e=>updatePage(idx,'body',e.target.value)} rows={4} className={miniCls}></textarea>
+</div>
+))}
+</div>
+</div>
+<button onClick={saveNewNote} className="btn-emerald w-full py-3 rounded-xl text-base">✅ Save Note</button>
+</div>
+)}
+<div className="space-y-2 max-h-96 overflow-y-auto pr-2">
+{notes.map(n=>(
+<div key={n.id} className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-yellow-500/40">
+<div className="flex-1 min-w-0"><p className="text-sm font-bold text-white truncate">{n.title}</p><p className="text-xs text-white/50">Class {n.classLevel} • {n.subject} • {n.medium==='en'?'EN':'HI'} • {n.pages.length}p • {n.isPremium?'🔒':'✅'}</p></div>
+<button onClick={()=>deleteNote(n.id,n.title)} className="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-xs font-black flex-shrink-0">🗑️</button>
+</div>
+))}
+</div>
+</section>
+</div>
+)}
+
+{adminTab==='quizzes'&&(
+<div className="space-y-6">
+<section className="glass rounded-2xl p-6 border border-emerald-500/30">
+<div className="flex justify-between items-center flex-wrap gap-3 mb-5">
+<h3 className="text-xl font-black bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">🎯 Manage Quizzes ({quizzes.length})</h3>
+<button onClick={()=>setShowQuizForm(!showQuizForm)} className={`px-5 py-2.5 rounded-xl font-black text-sm ${showQuizForm?'bg-rose-600 text-white':'btn-emerald'}`}>{showQuizForm?'✕ Cancel':'➕ Add New Quiz'}</button>
+</div>
+{showQuizForm&&(
+<div className="p-5 rounded-2xl bg-black/30 border border-emerald-500/30 mb-5 space-y-4">
+<h4 className="font-black text-emerald-400 text-sm">➕ New Quiz</h4>
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+<input type="text" placeholder="Quiz Title *" value={newQuiz.title} onChange={e=>setNewQuiz({...newQuiz,title:e.target.value})} className={miniCls}/>
+<select value={newQuiz.classLevel} onChange={e=>setNewQuiz({...newQuiz,classLevel:e.target.value})} className={miniCls}>{classesList.map(c=><option key={c} value={c} className="bg-slate-800">Class {c}</option>)}</select>
+<select value={newQuiz.subject} onChange={e=>setNewQuiz({...newQuiz,subject:e.target.value})} className={miniCls}>{subjectsList.map(s=><option key={s} value={s} className="bg-slate-800">{s}</option>)}</select>
+<select value={newQuiz.medium} onChange={e=>setNewQuiz({...newQuiz,medium:e.target.value})} className={miniCls}><option value="en" className="bg-slate-800">English</option><option value="hi" className="bg-slate-800">हिन्दी</option></select>
+</div>
+<div className="border-t border-white/10 pt-4">
+<div className="flex justify-between items-center mb-3"><h5 className="font-black text-white text-sm">❓ Questions ({newQuiz.questions.length})</h5><button onClick={addQuestion} className="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-black">➕ Add Question</button></div>
+<div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+{newQuiz.questions.map((q,idx)=>(
+<div key={idx} className="p-4 rounded-xl bg-white/5 border border-white/10">
+<div className="flex justify-between items-center mb-3"><span className="text-xs font-black text-emerald-400">Q{idx+1}</span>{newQuiz.questions.length>1&&<button onClick={()=>removeQuestion(idx)} className="text-xs text-rose-400 font-black">🗑️</button>}</div>
+<input type="text" placeholder="Question text *" value={q.q} onChange={e=>updateQuestion(idx,'q',e.target.value)} className={miniCls+' mb-2'}/>
+<p className="text-xs font-bold text-white/60 mb-2">Options (सही चुनें):</p>
+<div className="space-y-2">
+{q.options.map((opt,oi)=>(
+<label key={oi} className="flex items-center gap-2 cursor-pointer">
+<input type="radio" name={`correct_${idx}`} checked={q.correct===oi} onChange={()=>updateQuestion(idx,'correct',oi)} className="w-4 h-4 accent-yellow-400 flex-shrink-0"/>
+<span className="text-xs font-black text-white/60 w-4">{String.fromCharCode(65+oi)}.</span>
+<input type="text" placeholder={`Option ${String.fromCharCode(65+oi)}`} value={opt} onChange={e=>updateOption(idx,oi,e.target.value)} className={miniCls}/>
+</label>
+))}
+</div>
+</div>
+))}
+</div>
+</div>
+<button onClick={saveNewQuiz} className="btn-purple w-full py-3 rounded-xl text-base">✅ Save Quiz</button>
+</div>
+)}
+<div className="space-y-2 max-h-96 overflow-y-auto pr-2">
+{quizzes.map(q=>(
+<div key={q.id} className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-emerald-500/40">
+<div className="flex-1 min-w-0"><p className="text-sm font-bold text-white truncate">{q.title}</p><p className="text-xs text-white/50">Class {q.classLevel} • {q.subject} • {q.questions.length}q</p></div>
+<button onClick={()=>deleteQuiz(q.id,q.title)} className="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-xs font-black flex-shrink-0">🗑️</button>
+</div>
+))}
+</div>
+</section>
+</div>
+)}
+
+{adminTab==='railtest'&&(
+<section className="glass rounded-2xl p-6 border border-orange-500/30">
+<h3 className="text-xl font-black mb-5 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">🚂 Manage Railtest Q&A ({railtest.length})</h3>
+<div className="p-4 rounded-2xl bg-black/30 border border-orange-500/30 mb-5 space-y-3">
+<h4 className="font-black text-orange-400 text-sm">➕ New Q&A</h4>
+<textarea placeholder="Question *" value={newRailtest.question} onChange={e=>setNewRailtest({...newRailtest,question:e.target.value})} rows={2} className={miniCls}></textarea>
+<textarea placeholder="Answer *" value={newRailtest.answer} onChange={e=>setNewRailtest({...newRailtest,answer:e.target.value})} rows={3} className={miniCls}></textarea>
+<input type="text" placeholder="Category (e.g., General, Science, History)" value={newRailtest.category} onChange={e=>setNewRailtest({...newRailtest,category:e.target.value})} className={miniCls}/>
+<button onClick={saveRailtest} className="btn-orange w-full py-2.5 rounded-xl text-sm">✅ Add Q&A</button>
+</div>
+<div className="space-y-2 max-h-96 overflow-y-auto pr-2">
+{railtest.map(r=>(
+<div key={r.id} className="flex items-start justify-between gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-orange-500/40">
+<div className="flex-1 min-w-0">
+<p className="text-sm font-bold text-white">Q: {r.question}</p>
+<p className="text-xs text-emerald-400 mt-1">A: {r.answer}</p>
+<p className="text-xs text-orange-400 mt-1">📁 {r.category}</p>
+</div>
+<button onClick={()=>deleteRailtest(r.id)} className="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-xs font-black flex-shrink-0">🗑️</button>
+</div>
+))}
+{railtest.length===0&&<p className="text-center text-white/50 py-4">Koi Q&A nahi.</p>}
+</div>
+</section>
+)}
+
+{adminTab==='payments'&&(
+<section className="glass rounded-2xl p-6">
+<div className="flex justify-between items-center mb-5 flex-wrap gap-3">
+<h3 className="text-xl font-black text-yellow-400">📸 Payments ({payments.length})</h3>
+<button onClick={deleteOldPayments} className="px-4 py-2 bg-rose-600 text-white rounded-lg text-xs font-black hover:bg-rose-700 shadow-lg">🗑️ Clear Approved/Rejected</button>
+</div>
+<p className="text-xs text-white/60 mb-4">💡 Approve/Reject ke baad 🗑️ se delete kar dein — screenshot storage bachegi</p>
+<div className="overflow-x-auto">
+<table className="w-full text-left text-sm">
+<thead><tr className="border-b border-yellow-500/30">
+<th className="p-2 text-yellow-400 text-xs uppercase">Student</th>
+<th className="p-2 text-yellow-400 text-xs uppercase">UTR</th>
+<th className="p-2 text-yellow-400 text-xs uppercase">Proof</th>
+<th className="p-2 text-yellow-400 text-xs uppercase">Status</th>
+<th className="p-2 text-yellow-400 text-xs uppercase">Action</th>
+</tr></thead>
+<tbody>
+{payments.map(p=>(
+<tr key={p.id} className="border-b border-white/5">
+<td className="p-2 font-bold text-white">{p.studentName}</td>
+<td className="p-2 font-mono font-bold text-yellow-400">{p.utr}</td>
+<td className="p-2"><img src={p.screenshot} onClick={()=>setZoomImage(p.screenshot)} className="h-14 w-14 object-cover rounded-lg border-2 border-yellow-400/50 cursor-pointer" alt="proof"/></td>
+<td className="p-2"><span className={`px-2 py-0.5 rounded-full text-xs font-black uppercase ${p.status==='approved'?'bg-emerald-500/20 text-emerald-400':p.status==='rejected'?'bg-rose-500/20 text-rose-400':'bg-amber-500/20 text-amber-400'}`}>{p.status}</span></td>
+<td className="p-2">
+<div className="flex gap-2 flex-wrap">
+{p.status==='pending'&&(
+<>
+<button onClick={()=>verifyPayment(p.id,'approved')} className="px-3 py-1 bg-emerald-600 text-white rounded-lg text-xs font-black" title="Approve">✅</button>
+<button onClick={()=>verifyPayment(p.id,'rejected')} className="px-3 py-1 bg-rose-600 text-white rounded-lg text-xs font-black" title="Reject">❌</button>
+</>
+)}
+<button onClick={()=>deletePayment(p.id)} className="px-3 py-1 bg-red-700 text-white rounded-lg text-xs font-black" title="Delete this payment entry">🗑️</button>
+</div>
+</td>
+</tr>
+))}
+{payments.length===0&&(
+<tr><td colSpan="5" className="p-6 text-center text-white/50">Koi payment nahi.</td></tr>
+)}
+</tbody>
+</table>
+</div>
+</section>
+)}
+
+{adminTab==='password'&&(
+<section className="glass rounded-2xl p-6">
+<h3 className="text-xl font-black mb-4 text-pink-400">🔐 Change Password</h3>
+<form onSubmit={handlePasswordChange} className="space-y-4 text-sm">
+<input type="password" required value={passForm.oldPass} onChange={e=>setPassForm({...passForm,oldPass:e.target.value})} placeholder="Current Password" className={inputCls}/>
+<input type="password" required value={passForm.newPass} onChange={e=>setPassForm({...passForm,newPass:e.target.value})} placeholder="New Password (min 6)" className={inputCls}/>
+<button className="w-full py-2.5 rounded-xl bg-pink-600 text-white font-black">Update Password</button>
+</form>
+</section>
+)}
+
+{adminTab==='reset'&&(
+<section className="glass rounded-2xl p-6 border border-rose-500/30">
+<h3 className="text-xl font-black mb-4 text-rose-400">🗑️ Reset All Data</h3>
+<p className="text-sm text-white/70 mb-4">Sab kuch reset ho jayega — notes, quizzes, announcements, railtest, settings, payments. Sample data wapas aa jayega. <strong className="text-rose-400">Warning: Apna data delete ho jayega!</strong></p>
+<button onClick={resetAllData} className="btn-rose w-full py-3 rounded-xl">⚠️ Reset Everything</button>
+</section>
+)}
+
+</div>
+)}
+
+</main>
+
+{openNote&&(
+<div className="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-2 sm:p-4 backdrop-blur-md">
+<div className="w-full max-w-3xl max-h-[92vh] overflow-hidden rounded-3xl shadow-2xl flex flex-col" style={{background:'linear-gradient(135deg,rgba(20,10,40,0.98),rgba(10,5,25,0.98))',border:'2px solid rgba(255,215,0,0.3)'}}>
+<div className="bg-gradient-to-r from-yellow-500 via-pink-500 to-purple-600 text-white p-4 flex justify-between items-center"><div><h3 className="font-black text-base">{openNote.title}</h3><p className="text-xs opacity-90">Class {openNote.classLevel} • {openNote.subject} • {openNote.medium==='en'?'English':'हिन्दी'}</p></div><button onClick={()=>setOpenNote(null)} className="p-2 rounded-lg bg-black/30 hover:bg-black/50 text-lg">✕</button></div>
+<div className="p-5 overflow-y-auto page-body flex-1 text-sm"><h3 className="text-lg font-black mb-3 bg-gradient-to-r from-yellow-400 to-pink-400 bg-clip-text text-transparent">{openNote.pages[openPage].heading}</h3><div dangerouslySetInnerHTML={{__html:openNote.pages[openPage].body}}/></div>
+<div className="p-4 border-t border-yellow-500/20 space-y-2">
+<button onClick={()=>toggleRead(openNote.id)} className={`w-full py-2.5 rounded-xl font-black text-sm ${readNotes.includes(openNote.id)?'bg-emerald-500 text-white':'bg-white/10 text-white/70 border-2 border-white/20 hover:border-yellow-400'}`}>{readNotes.includes(openNote.id)?'✅ Marked as Read':'⬜ Mark as Read'}</button>
+<div className="flex justify-between items-center gap-2">
+<button onClick={()=>setOpenPage(Math.max(0,openPage-1))} disabled={openPage===0} className="px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white font-bold text-sm disabled:opacity-30">← Prev</button>
+<span className="text-sm font-bold text-yellow-400">Page {openPage+1} / {openNote.pages.length}</span>
+<button onClick={()=>setOpenPage(Math.min(openNote.pages.length-1,openPage+1))} disabled={openPage===openNote.pages.length-1} className="btn-gold px-4 py-2 rounded-xl text-sm disabled:opacity-30">Next →</button>
+</div>
+</div>
+</div>
+</div>
+)}
+
+{activeQuiz&&(
+<div className="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-2 sm:p-4 backdrop-blur-md">
+<div className="w-full max-w-2xl max-h-[92vh] overflow-y-auto rounded-3xl shadow-2xl" style={{background:'linear-gradient(135deg,rgba(20,10,40,0.98),rgba(10,5,25,0.98))',border:'2px solid rgba(16,185,129,0.4)'}}>
+<div className="sticky top-0 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white p-4 flex justify-between items-center rounded-t-3xl z-10"><div><h3 className="font-black text-base">{activeQuiz.title}</h3><p className="text-xs opacity-90">{activeQuiz.questions.length} Questions</p></div><button onClick={closeQuiz} className="p-2 rounded-lg bg-black/30 hover:bg-black/50 text-lg">✕</button></div>
+<div className="p-5 space-y-4">
+{activeQuiz.questions.map((q,i)=>{
+const chosen=quizAnswers[i];const correct=q.correct;
+return(
+<div key={i} className={`p-4 rounded-2xl border-2 transition-all ${quizSubmitted?(chosen===correct?'border-emerald-500 bg-emerald-500/10':'border-rose-500 bg-rose-500/10'):'border-white/15 bg-white/5'}`}>
+<p className="font-bold mb-3 text-white">Q{i+1}. {q.q}</p>
+<div className="space-y-2">
+{q.options.map((opt,idx)=>(
+<label key={idx} className={`flex items-center gap-2 p-2.5 rounded-xl cursor-pointer text-sm transition-all ${quizSubmitted&&idx===correct?'bg-emerald-500/20 font-bold border border-emerald-500':'hover:bg-white/10 text-white/80 border border-transparent'}`}>
+<input type="radio" name={`q${i}`} disabled={quizSubmitted} checked={chosen===idx} onChange={()=>setQuizAnswers({...quizAnswers,[i]:idx})} className="accent-yellow-400"/>
+<span>{String.fromCharCode(65+idx)}. {opt}</span>
+{quizSubmitted&&idx===correct&&<span className="ml-auto text-emerald-400 font-black">✓</span>}
+{quizSubmitted&&chosen===idx&&idx!==correct&&<span className="ml-auto text-rose-400 font-black">✗</span>}
+</label>
+))}
+</div>
+</div>
+);
+})}
+</div>
+<div className="p-5 border-t border-emerald-500/20">
+{!quizSubmitted?(
+<button onClick={submitQuiz} disabled={Object.keys(quizAnswers).length<activeQuiz.questions.length} className={`w-full py-3 rounded-xl font-black text-white ${Object.keys(quizAnswers).length<activeQuiz.questions.length?'bg-white/10 text-white/40 cursor-not-allowed':'btn-emerald'}`}>✅ Submit Quiz</button>
+):(
+<div className="text-center">
+<p className="text-3xl font-black mb-3 text-white">🎉 Score: <span className="text-yellow-400">{quizScore}</span> / {activeQuiz.questions.length}</p>
+<p className="text-sm mb-4 text-yellow-300">{Math.round(quizScore/activeQuiz.questions.length*100)>=80?'🌟 Excellent!':Math.round(quizScore/activeQuiz.questions.length*100)>=50?'💪 Good Job!':'📚 Keep Practicing!'}</p>
+<button onClick={closeQuiz} className="btn-purple w-full py-3 rounded-xl">Close</button>
+</div>
+)}
+</div>
+</div>
+</div>
+)}
+
+{zoomImage&&(
+<div onClick={()=>setZoomImage(null)} className="fixed inset-0 bg-black/90 flex items-center justify-center z-[60] p-4 cursor-zoom-out backdrop-blur-md">
+<img src={zoomImage} className="max-h-[85vh] rounded-2xl border-4 border-yellow-400 shadow-2xl" alt="zoom"/>
+</div>
+)}
+
+<a href={`https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent('Hello, mujhe EduNotes Premium ke baare mein help chahiye.')}`} target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 z-40 flex items-center gap-2 text-white font-black px-5 py-3.5 rounded-full shadow-2xl hover:scale-110 transition-transform" style={{background:'linear-gradient(135deg,#25d366,#128c7e)',boxShadow:'0 10px 40px rgba(37,211,102,0.5),inset 0 1px 0 rgba(255,255,255,0.3)'}} aria-label="WhatsApp Support">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+<span className="hidden sm:inline text-sm">Support</span>
+</a>
+
+<footer className="text-center py-10 px-4">
+<div className="max-w-2xl mx-auto rounded-2xl py-6 px-6 border-2 border-yellow-500/40 relative overflow-hidden" style={{background:'linear-gradient(135deg,rgba(20,10,40,0.9),rgba(10,5,25,0.9))'}}>
+<div className="absolute inset-0 opacity-20" style={{background:'radial-gradient(circle at 50% 50%,rgba(255,215,0,0.3),transparent 70%)'}}/>
+<div className="relative"><p className="mb-3 text-sm text-white/60">© {new Date().getFullYear()} EduNotes Premium • All Rights Reserved</p><div className="h-px bg-gradient-to-r from-transparent via-yellow-500 to-transparent my-3"/><p className="font-black text-sm tracking-[0.15em] rainbow-text">DEVELOPED BY : ABHISHEK KUMAR YADAV</p></div>
+</div>
+</footer>
+</div>
+);
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+
+setTimeout(()=>{
+const l=document.getElementById('loading-screen'),r=document.getElementById('root');
+if(l&&r&&r.innerHTML.trim())l.style.display='none';
+},1500);
+</script>
+</body>
+</html>
